@@ -1,0 +1,11 @@
+SCENARIO=base
+DEBUG=1
+SECRET_KEY=change_me
+LANG=en-US
+SQL_ENGINE=django.db.backends.postgresql_psycopg2
+SQL_DATABASE=app
+SQL_USER=db1user
+SQL_PASSWORD=db1passwd
+SQL_HOST=db
+SQL_PORT=5432
+DATABASE=postgres

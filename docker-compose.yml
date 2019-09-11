@@ -1,0 +1,70 @@
+version: "3.4"
+services:
+  db:
+    container_name: postgres
+    image: postgres:alpine
+    volumes:
+      - dbdata:/pgdata
+    env_file: db/env
+  app:
+    container_name: app
+    env_file: backend/env
+    build: 
+      context : backend/
+      dockerfile: Dockerfile
+      target: local
+      args: 
+       - SCENARIO=local
+    
+    volumes:
+      - ./backend:/backend
+      - ./backend/static:/backend/static  # <-- bind the static volume
+      - ./backend/media:/backend/media  # <-- bind the media volume
+    healthcheck:
+      test: curl --fail http://localhost:8000/admin/ || exit
+    depends_on: 
+      - db 
+    links:
+      - cache
+  cache:
+    image: redis:alpine
+    container_name: redis
+  
+  frontend:
+    build: 
+      context : frontend/
+      dockerfile: Dockerfile
+    container_name: react
+    volumes:
+      - ./frontend/:/frontend
+      - modules:/frontend/node_modules
+    env_file: frontend/env
+    ports:
+      - '3000:3000'
+    links:
+      - app:app
+      - proxy:proxy
+    depends_on:
+      - app
+  
+  proxy:
+    container_name: proxy_nginx
+    image: nginx:alpine
+    volumes:
+      - ./proxy/:/etc/nginx/conf.d
+      - ./backend/static:/backend/static  # <-- bind the static volume
+      - ./backend/media:/backend/media  # <-- bind the media volume
+      - ./frontend/build:/var/www/frontend
+    ports:
+      - "80:80"
+      - "443:443"
+    links:
+      - app:app
+    depends_on:
+      - app
+volumes:
+  dbdata:
+  backend:
+  modules:
+  static_volume:
+  media_volume:
