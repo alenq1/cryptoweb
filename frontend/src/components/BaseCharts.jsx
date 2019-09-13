@@ -52,18 +52,20 @@ const BaseCharts = ({
     getChartData(cryptoCharts, 10);
   }, []);
 
-  console.log(chartData, 'DATA VOY A PASAR LOS RESULTADOS A CHART');
+  console.log(chartData[0], 'DATA VOY A PASAR LOS RESULTADOS A CHART');
   return (
     <center>
       <h1 className='m-5'>Top Crtpto Charts</h1>
       <div className='row p-3 m-3'>
         {loadingch ? (
           <p>LOADING....</p>
-        ) : !chartData ? (
+        ) : !chartData[0] ? (
           <p>ERROR</p>
         ) : (
-          chartData.map((data, index) => (
-            <Card className='col-3 p-1 m-5 bg-dark text-white'>
+          chartData[0].map((data, index) => (
+            <Card
+              className='col-3 p-1 m-5 bg-dark text-white'
+              key={data.time + index}>
               <p>{data.time}</p>
               <p>{data.symbol}</p>
               <Line2 data={data.finaldata} />

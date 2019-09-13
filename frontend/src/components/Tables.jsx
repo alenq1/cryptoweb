@@ -33,8 +33,8 @@ const Tables = (props, { color, txtColor, apiDatas, apiData }) => {
   //props.data.sort((a, b) => b.c - a.c)
   const lol = symbol => {
     console.log('LOL APRETADO con', symbol);
-    props.getChartData(symbol, 10);
-    props.detailCrypto(symbol);
+    //props.getChartData(symbol, 10);
+    props.detailCrypto([symbol]);
   };
   //props.apiData ? props.apiData.sort((a, b) => b.RAW.USD.MKTCAP - a.RAW.USD.MKTCAP) : null
   console.log(props.apiDatas, 'PARA PINTAr EN tABLAS');
@@ -43,11 +43,9 @@ const Tables = (props, { color, txtColor, apiDatas, apiData }) => {
     <React.Fragment>
       <table
         className='table-borderless table-hover table-striped hover m-4 p-4'
-        variant='dark'
-      >
+        variant='dark'>
         <thead
-          style={{ background: '#004e92', color: 'whitesmoke', height: '60%' }}
-        >
+          style={{ background: '#004e92', color: 'whitesmoke', height: '60%' }}>
           <tr style={{ padding: '2em', textAlign: 'center' }}>
             <th style={stythtd}>Rank</th>
             <th style={stythtd}>Name</th>
@@ -69,16 +67,14 @@ const Tables = (props, { color, txtColor, apiDatas, apiData }) => {
             color: props.txtColor === 'whitesmoke' ? 'whitesmoke' : 'black',
             textAlign: 'left',
             backgroundColor: props.color === 'black' ? '#232526' : 'white'
-          }}
-        >
+          }}>
           {!props.apiDatas[0].CoinInfo
             ? 0
             : props.apiDatas.map((coin, index) => (
                 <tr
                   style={{ padding: '2em' }}
                   key={index}
-                  onClick={() => lol(coin.CoinInfo.Name)}
-                >
+                  onClick={() => lol(coin.CoinInfo.Name)}>
                   <td style={stythtd}>{index + 1} </td>
                   <td style={{ ...stythtd, textAlign: 'left' }}>
                     <img
@@ -95,8 +91,7 @@ const Tables = (props, { color, txtColor, apiDatas, apiData }) => {
                       coin.RAW.USD.CHANGEPCT24HOUR > 0
                         ? { ...stythtd, color: '#39FF33' }
                         : { ...stythtd, color: 'red' }
-                    }
-                  >
+                    }>
                     {coin.DISPLAY.USD.CHANGEPCT24HOUR} %
                   </td>
                   <td style={{ ...stythtd, textAlign: 'left' }}>

@@ -15,7 +15,8 @@ services:
       target: local
       args: 
        - SCENARIO=local
-    
+    entrypoint: bash -c './wait-for-it.sh db:5432 -- python manage.py migrate &&
+              python manage.py runserver 0.0.0.0:8000'
     volumes:
       - ./backend:/backend
       - ./backend/static:/backend/static  # <-- bind the static volume
@@ -26,6 +27,23 @@ services:
       - db 
     links:
       - cache
+  
+  celery:
+    container_name: celery
+    env_file: backend/env
+    image: cryptoweb_app
+    entrypoint: celery -A backend worker -l info
+    volumes:
+      - ./backend:/backend
+    depends_on:
+      - app
+      - cache
+    links:
+      - app:app
+      - cache:cache
+
+
+
   cache:
     image: redis:alpine
     container_name: redis

@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from crypto.views import NewsApi
+from crypto.views import NewsApi, WalletsApi
 ##
 from backend.apiroutes import router
 
@@ -23,5 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include(router.urls)),
     path('api/news/', NewsApi.as_view(), name="news"),
+    path('api/wallets/', WalletsApi.as_view(), name="wallets")
 
 ]
