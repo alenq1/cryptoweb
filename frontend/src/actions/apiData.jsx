@@ -10,7 +10,10 @@ import {
   ERROR_GET_CHART,
   LOADING_WALLETS,
   GET_WALLETS,
-  ERROR_GET_WALLETS
+  ERROR_GET_WALLETS,
+  LOADING_EXPLORER,
+  GET_EXPLORER,
+  ERROR_GET_EXPLORER,
 } from '../constants/action-types'
 import axios from 'axios'
 import adapter from 'axios/lib/adapters/http'
@@ -155,6 +158,32 @@ export const getWallets = () => dispatch => {
       dispatch({ type: ERROR_GET_WALLETS, payload: error })
     })
 }
+
+export const getExplorers = () => dispatch => {
+  dispatch({ type: LOADING_EXPLORER })
+  axios('http://chainz.cryptoid.info/explorer/api.dws?q=summary/')
+    .then(data => {
+
+      dispatch({ type: GET_EXPLORER, payload: data.data })
+      localStorage.setItem('explorerData', JSON.stringify(data.data))
+
+    })
+
+    .catch(error => {
+      console.log(error, 'ERROR EXPLORERDATA')
+      dispatch({ type: ERROR_GET_EXPLORER, payload: error })
+    })
+}
+
+
+
+
+
+
+
+
+
+
 
 // export const fetchData = () => {
 //   return dispatch => {

@@ -10,16 +10,16 @@ const Wallets = ({ getWallets, walletsData }) => {
 
   return (
     <div>
-      {walletsData ? (
-        walletsData.map(data => {
-          ;<div>
+      {walletsData ?
+        walletsData.map(data =>
+          <div>
             <p>{data.walletUrl}</p>
             <p>{data.walletName}</p>
           </div>
-        })
-      ) : (
+        )
+        :
         <p>Error</p>
-      )}
+      }
     </div>
   )
 }
@@ -32,7 +32,7 @@ const mapStateToProps = state => {
     walletsData: state.walletsReducer.walletsData,
     loadingwl: state.walletsReducer.loading,
     error: state.walletsReducer.error,
-    apiData: state.apidataReducer.apiData
+    apiData: state.apiDataReducer.apiData
   }
 }
 export default connect(

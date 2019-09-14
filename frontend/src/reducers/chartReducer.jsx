@@ -31,7 +31,7 @@ const chartReducer = (state = initialState, action) => {
       return {
         ...state,
         loadingch: false,
-        chartData: [...state.chartData, action.payload]
+        chartData: action.payload
       };
     default:
       return state;

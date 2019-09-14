@@ -20,14 +20,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY = 'rem#fzp89q)49-%3m3dsuec!+2z-92a)j8flp)rivihp#rxtu%'
+# SECRET_KEY = 'rem#fzp89q)49-%3m3dsuec!+2z-92a)j8flp)rivihp#rxtu%'
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 #DEBUG = True
 DEBUG = int(os.environ.get('DEBUG', default=0))
 
-ALLOWED_HOSTS = ['proxy', 'localhost', 'app', '172.19.0.4', 'frontend']
+ALLOWED_HOSTS = ['proxy', 'localhost', 'app', '172.19.0.4', 'frontend', 'channels']
 
 
 # Application definition
@@ -39,8 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 3rd parties
     'rest_framework',
     'corsheaders',
+    'channels',
+    # localapps
     'backend',
 
 ]
@@ -77,26 +80,29 @@ TEMPLATES = [
 WSGI_APPLICATION = 'backend.wsgi.application'
 
 
+ASGI_APPLICATION = 'backend.routing.application'
+
+
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-#DATABASES = {
+# DATABASES = {
 #    'default': {
 #        'ENGINE': 'django.db.backends.sqlite3',
 #        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #    }
-#}
+# }
 
-        # DATABASES = {
-        #     'default': {
-        #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        #         'NAME': 'app',
-        #         'USER': 'db1user',
-        #         'PASSWORD': 'db1passwd',
-        #         'HOST': 'db',  # <-- IMPORTANT: same name as docker-compose service!
-        #         'PORT': '5432',
-        #     }
-        # }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'app',
+#         'USER': 'db1user',
+#         'PASSWORD': 'db1passwd',
+#         'HOST': 'db',  # <-- IMPORTANT: same name as docker-compose service!
+#         'PORT': '5432',
+#     }
+# }
 
 
 DATABASES = {
@@ -109,7 +115,6 @@ DATABASES = {
         'PORT': os.environ.get('SQL_PORT', '5432'),
     }
 }
-
 
 
 # Password validation
@@ -145,7 +150,7 @@ USE_L10N = True
 USE_TZ = True
 
 
-#CORS SETTINGS
+# CORS SETTINGS
 CORS_ORIGIN_ALLOW_ALL = True
 
 
@@ -154,14 +159,16 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 STATIC_URL = '/staticlocal/'
 
-# as declared in NginX conf, it must match 
-STATIC_ROOT = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), 'backend/static')
+# as declared in NginX conf, it must match
+STATIC_ROOT = os.path.join(os.path.dirname(
+    os.path.dirname(BASE_DIR)), 'backend/static')
 
-# do the same for media files, it must match 
-MEDIA_ROOT = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), 'backend/media')
+# do the same for media files, it must match
+MEDIA_ROOT = os.path.join(os.path.dirname(
+    os.path.dirname(BASE_DIR)), 'backend/media')
 
 
-#CELERY SETTINGS
+# CELERY SETTINGS
 
 CELERY_BROKER_URL = 'redis://redis:6379'
 CELERY_RESULT_BACKEND = 'redis://redis:6379'
@@ -169,6 +176,16 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
 
+# CHANNELS SETTINGS
 
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",  # redis como backend
+        "CONFIG": {
+            # busca a redis en la direccion
+            "hosts": [os.environ.get('REDIS_URL', 'redis://redis:6379')],
 
-
+        },
+        # "ROUTING": "scrap.routing.channel_routing",  # buscar el routing
+    },
+}

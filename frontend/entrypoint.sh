@@ -1,4 +1,6 @@
 #!/bin/sh 
 # if image only runs in sh
-npm build
+
+# if only build for final productiosn
+#npm build
 npm start
