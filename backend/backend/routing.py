@@ -1,9 +1,12 @@
-from channels.routing import ProtocolTypeRouter
-
-from channels.routing import URLRouter
-#import apps.tasks.api.routing
+from channels.auth import AuthMiddlewareStack
+from channels.routing import ProtocolTypeRouter, URLRouter
+import crypto.routing
 
 application = ProtocolTypeRouter({
-    # Empty for now (http->django views is added by default)
-    # 'websocket': URLRouter(apps.tasks.api.routing.websocket_urlpatterns),
+    # (http->django views is added by default)
+    'websocket': AuthMiddlewareStack(
+        URLRouter(
+            crypto.routing.websocket_urlpatterns
+        )
+    ),
 })
