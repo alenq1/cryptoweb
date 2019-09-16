@@ -6,8 +6,8 @@ services:
     volumes:
       - dbdata:/pgdata
     env_file: db/env
-  app:
-    container_name: app
+
+  base: &base
     env_file: backend/env
     build: 
       context : backend/
@@ -15,8 +15,12 @@ services:
       target: local
       args: 
        - SCENARIO=local
-    entrypoint: bash -c './wait-for-it.sh db:5432 -- python manage.py migrate &&
-              python manage.py runserver 0.0.0.0:8000'
+    
+  
+  app:
+    <<: *base
+    container_name: app
+    entrypoint: ['entrypoints/start_server.sh']
     volumes:
       - ./backend:/backend
       - ./backend/static:/backend/static  # <-- bind the static volume
@@ -27,12 +31,11 @@ services:
       - db 
     links:
       - cache
-  
+
   celery:
+    <<: *base
     container_name: celery
-    env_file: backend/env
-    image: cryptoweb_app
-    entrypoint: celery -A backend worker -l info
+    entrypoint: ['entrypoints/start_worker.sh']
     volumes:
       - ./backend:/backend
     depends_on:
@@ -43,12 +46,13 @@ services:
       - cache:cache
 
   channels:
+    <<: *base
     container_name: channels
-    env_file: backend/env
-    image: cryptoweb_app
-    entrypoint: daphne backend.asgi:application --bind 0.0.0.0 --port 9000
+    entrypoint: ['entrypoints/start_async_server.sh']
     volumes:
       - ./backend:/backend
+    healthcheck:
+      test: curl --fail http://localhost:9000/admin/ || exit
     depends_on:
       - app
       - cache
@@ -56,7 +60,6 @@ services:
       - app:app
       - cache:cache
     
-
 
   cache:
     image: redis:alpine

@@ -40,7 +40,7 @@ RUN pip install --no-cache /wheels/*
 #Create a new user for execute the container instead root for security purposes
 RUN groupadd app && useradd -g app app
 RUN mkdir -p /backend  /backend/media /backend/static \
-&& chown -R app:app /backend 
+    && chown -R app:app /backend 
 WORKDIR /backend
 ADD . /backend
 
@@ -76,4 +76,4 @@ RUN chown -R app:app /backend/*
 ENV PORT 8000
 EXPOSE $PORT
 USER app
-ENTRYPOINT ["./entrypoint.sh"]
+#ENTRYPOINT ["./entrypoint.sh"]
