@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -170,6 +171,20 @@ MEDIA_ROOT = os.path.join(os.path.dirname(
 
 # CELERY SETTINGS
 
+from celery.schedules import crontab
+
+CELERY_BEAT_SCHEDULE = {
+ 'crypto_api_request': {
+       'task': 'celery_app.get_api_data',
+        # 
+       'schedule': crontab(minute=1),
+        # 
+       'args': (),
+    },
+    
+    
+}
+
 CELERY_BROKER_URL = 'redis://redis:6379'
 CELERY_RESULT_BACKEND = 'redis://redis:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
@@ -189,3 +204,7 @@ CHANNEL_LAYERS = {
         # "ROUTING": "scrap.routing.channel_routing",  # buscar el routing
     },
 }
+
+
+
+

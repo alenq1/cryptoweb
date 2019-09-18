@@ -1,25 +1,25 @@
 version: "3.4"
+
+x-base: &base
+    env_file: backend/env
+    build: 
+      context : backend/
+      dockerfile: Dockerfile
+      #target: local
+      args: 
+       - SCENARIO=local
+
 services:
   db:
     container_name: postgres
     image: postgres:alpine
     volumes:
       - dbdata:/pgdata
-    env_file: db/env
-
-  base: &base
-    env_file: backend/env
-    build: 
-      context : backend/
-      dockerfile: Dockerfile
-      target: local
-      args: 
-       - SCENARIO=local
-    
+    env_file: db/env  
   
   app:
     <<: *base
-    container_name: app
+    container_name: django
     entrypoint: ['entrypoints/start_server.sh']
     volumes:
       - ./backend:/backend
@@ -30,7 +30,9 @@ services:
     depends_on: 
       - db 
     links:
-      - cache
+      - redis
+    expose:
+      - "8000"
 
   celery:
     <<: *base
@@ -40,10 +42,11 @@ services:
       - ./backend:/backend
     depends_on:
       - app
-      - cache
+      - redis
     links:
       - app:app
-      - cache:cache
+      - redis:redis
+    
 
   channels:
     <<: *base
@@ -54,14 +57,16 @@ services:
     healthcheck:
       test: curl --fail http://localhost:9000/admin/ || exit
     depends_on:
+      - db
       - app
-      - cache
+      - redis
     links:
       - app:app
-      - cache:cache
+      - redis:redis
+    expose:
+      - "9000"
     
-
-  cache:
+  redis:
     image: redis:alpine
     container_name: redis
   

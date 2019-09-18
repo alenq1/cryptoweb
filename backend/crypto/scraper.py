@@ -4,6 +4,8 @@ import time
 import json
 import re
 from celery import shared_task
+from celery.task.schedules import crontab
+from celery.decorators import periodic_task
 from bs4 import BeautifulSoup
 
 
@@ -79,6 +81,14 @@ def add(a, b):
     print('EJEVUTADA TASKKK')
     time.sleep(5)
     return a + b
+
+
+@shared_task
+def get_api_data():
+    api = requests.get('https://min-api.cryptocompare.com/data/top/totalvolfull?limit=100&tsym=USD')
+    print("ME EJECUTARON COMO TAREA PERIRODICA")
+    data_to_client = api.json()
+    return data_to_client
 
 
 def get_google_search(to_scrap):

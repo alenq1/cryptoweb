@@ -1,6 +1,7 @@
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer, AsyncJsonWebsocketConsumer
-from .scraper import get_page, get_google_search, scrap_news_sites
+from .scraper import get_page, get_google_search, scrap_news_sites, get_api_data
+
 import json
 
 
@@ -37,6 +38,8 @@ class TestConsumer(AsyncJsonWebsocketConsumer):
 
         ### RESPONSE TO THE INITAL MESSAGE
 
+        taskk_result = get_api_data.delay()
+        print(taskk_result, "RESULTADO TARE PROGRAMADA")
         page = get_page('https://blog.feedspot.com/cryptocurrency_blogs/')
         response = scrap_news_sites(page)
         await self.send_json({
