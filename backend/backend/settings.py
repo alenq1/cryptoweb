@@ -171,19 +171,16 @@ MEDIA_ROOT = os.path.join(os.path.dirname(
 
 # CELERY SETTINGS
 
-from celery.schedules import crontab
+# from celery.schedules import crontab
 
-CELERY_BEAT_SCHEDULE = {
- 'crypto_api_request': {
-       'task': 'celery_app.get_api_data',
-        # 
-       'schedule': crontab(minute=1),
-        # 
-       'args': (),
-    },
-    
-    
-}
+# CELERY_BEAT_SCHEDULE = {
+#  'crypto_api_request': {
+#        'task': 'crypto.scraper.get_api_data',
+#         # 
+#        'schedule': crontab(seconds=10),
+#         # 
+#     }
+#}
 
 CELERY_BROKER_URL = 'redis://redis:6379'
 CELERY_RESULT_BACKEND = 'redis://redis:6379'

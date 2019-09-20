@@ -27,7 +27,14 @@ export const ConnectWS = (wsUrl) => dispatch => {
     wsconn.onmessage = function (event) {
         //       //console.info('received data', JSON.parse(event.data));
         console.log("MENSAGE RECIBIDO WSSSSSSS");
-        dispatch({ type: WEBSOCKET_MESSAGE, payload: JSON.parse(event.data) })
+        dispatch({
+            type: WEBSOCKET_MESSAGE,
+            payload: {
+                'cryptoData': JSON.parse(event.data).message.cryptoData.Data,
+                'explorerInfo': JSON.parse(event.data).message.explorerInfo,
+                'exchangeData': JSON.parse(event.data).message.exchangeData
+            }
+        })
         //       showData(JSON.parse(event.data))
     }
     wsconn.onerror = function (event) {

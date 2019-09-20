@@ -71,40 +71,40 @@ const Tables = (props, { color, txtColor, apiDatas, apiData }) => {
           {!props.apiDatas[0].CoinInfo
             ? 0
             : props.apiDatas.map((coin, index) => (
-                <tr
-                  style={{ padding: '2em' }}
-                  key={index}
-                  onClick={() => lol(coin.CoinInfo.Name)}>
-                  <td style={stythtd}>{index + 1} </td>
-                  <td style={{ ...stythtd, textAlign: 'left' }}>
-                    <img
-                      src={`https://www.cryptocompare.com/${coin.CoinInfo.ImageUrl}`}
-                      height='20px'
-                      width='20px'
-                      className='mr-3'
-                    />
-                    {coin.CoinInfo.FullName} {coin.CoinInfo.Name}
+              <tr
+                style={{ padding: '2em' }}
+                key={index}
+                onClick={() => lol(coin.CoinInfo.Name)}>
+                <td style={stythtd}>{index + 1} </td>
+                <td style={{ ...stythtd, textAlign: 'left' }}>
+                  <img
+                    src={`https://www.cryptocompare.com/${coin.CoinInfo.ImageUrl}`}
+                    height='20px'
+                    width='20px'
+                    className='mr-3'
+                  />
+                  {coin.CoinInfo.FullName} {coin.CoinInfo.Name}
+                </td>
+                <td style={stythtd}>{coin.DISPLAY.USD.PRICE}</td>
+                <td
+                  style={
+                    coin.RAW.USD.CHANGEPCT24HOUR > 0
+                      ? { ...stythtd, color: '#39FF33' }
+                      : { ...stythtd, color: 'red' }
+                  }>
+                  {coin.DISPLAY.USD.CHANGEPCT24HOUR} %
                   </td>
-                  <td style={stythtd}>{coin.DISPLAY.USD.PRICE}</td>
-                  <td
-                    style={
-                      coin.RAW.USD.CHANGEPCT24HOUR > 0
-                        ? { ...stythtd, color: '#39FF33' }
-                        : { ...stythtd, color: 'red' }
-                    }>
-                    {coin.DISPLAY.USD.CHANGEPCT24HOUR} %
-                  </td>
-                  <td style={{ ...stythtd, textAlign: 'left' }}>
-                    {coin.DISPLAY.USD.MKTCAP}{' '}
-                  </td>
-                  <td style={{ ...stythtd, textAlign: 'left' }}>
-                    {coin.DISPLAY.USD.SUPPLY}
-                  </td>
-                  <td style={{ ...stythtd, textAlign: 'left' }}>
-                    {coin.DISPLAY.USD.VOLUME24HOUR}
-                  </td>
-                </tr>
-              ))}
+                <td style={{ ...stythtd, textAlign: 'left' }}>
+                  {coin.DISPLAY.USD.MKTCAP}{' '}
+                </td>
+                <td style={{ ...stythtd, textAlign: 'left' }}>
+                  {coin.DISPLAY.USD.SUPPLY}
+                </td>
+                <td style={{ ...stythtd, textAlign: 'left' }}>
+                  {coin.DISPLAY.USD.VOLUME24HOUR}
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </React.Fragment>

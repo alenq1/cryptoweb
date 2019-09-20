@@ -3,10 +3,31 @@ import requests.exceptions as ex
 import time
 import json
 import re
+import logging
+import concurrent.futures
 from celery import shared_task
 from celery.task.schedules import crontab
 from celery.decorators import periodic_task
+from backend.celery import celery_app
+
 from bs4 import BeautifulSoup
+##
+from celery.utils.log import get_logger
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+
+
+
+# celery_app.conf.beat_schedule = {
+#     # Executes every Monday morning at 7:30 a.m.
+#     'SCARP_API_DATA': {
+#         'task': 'shared_task.get_api_data',
+#         'schedule': crontab(),
+#         'args': (),
+#     },
+# }
+
+
 
 
 def get_page(url):
@@ -85,10 +106,38 @@ def add(a, b):
 
 @shared_task
 def get_api_data():
-    api = requests.get('https://min-api.cryptocompare.com/data/top/totalvolfull?limit=100&tsym=USD')
-    print("ME EJECUTARON COMO TAREA PERIRODICA")
-    data_to_client = api.json()
-    return data_to_client
+    
+    sites_to_get_data = [{'page': 'cryptoData', 'url':'https://min-api.cryptocompare.com/data/top/totalvolfull?limit=100&tsym=USD'},
+                        {'page': 'explorerInfo', 'url':'http://chainz.cryptoid.info/explorer/api.dws?q=summary'},
+                        {'page': 'exchangeData', 'url':'https://api.coinpaprika.com/v1/exchanges'}]
+
+    def get_site(url):
+        return requests.get(url)
+    
+    def get_all_sites(urls):
+        with concurrent.futures.ThreadPoolExecutor(max_workers=len(sites_to_get_data)) as executor:
+            return list(executor.map(get_site, urls))
+
+    #api = requests.get('https://min-api.cryptocompare.com/data/top/totalvolfull?limit=100&tsym=USD')
+    #data_to_client = api.json()
+
+    only_sites = [urls['url'] for urls in sites_to_get_data ]
+    data_to_client = [responses.json() for responses in get_all_sites(only_sites)]
+
+    print(data_to_client[0]['Data'][0]['CoinInfo'], "ME EJECUTARON COMO TAREA PERIRODICA")
+    
+    #return api
+    #return data_to_client
+    channel_layer = get_channel_layer()
+    logger = logging.getLogger()
+    print("ESTES ESSSSS CHANNEL LAYYYYYYER", channel_layer)
+
+    async_to_sync(channel_layer.group_send)('crypto', {
+        'type': 'send.broadcast' ,
+        sites_to_get_data[0]['page']: data_to_client[0],
+        sites_to_get_data[1]['page']: data_to_client[1],
+        sites_to_get_data[2]['page']: data_to_client[2],
+    })
 
 
 def get_google_search(to_scrap):

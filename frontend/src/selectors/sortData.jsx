@@ -1,15 +1,16 @@
 import { createSelector } from 'reselect'
-import {orderBy} from 'lodash'
-                                
+import { orderBy } from 'lodash'
 
-const rawData = state => state.apiDataReducer && state.apiDataReducer.apiData
+
+//const rawData = state => state.apiDataReducer && state.apiDataReducer.apiData
+const rawData = state => state.WSocketReducer && state.WSocketReducer.wsData
 const getKey = state => state.apiDataReducer && state.apiDataReducer.sortKey
-const getDirection = state => state.apiDataReducer &&  state.apiDataReducer.sortDirection
+const getDirection = state => state.apiDataReducer && state.apiDataReducer.sortDirection
 
 
-export const sortData = createSelector (
+export const sortData = createSelector(
 
-    
+
     [rawData, getKey, getDirection],
 
     (data, sortKey, direction) => {
@@ -18,26 +19,30 @@ export const sortData = createSelector (
         console.log(sortKey, "GETKEY")
         console.log(direction, "GET DIRECTIRO")
 
-                          
-    
-        if(sortKey === 'price' && data.length > 1){
+
+
+        if (sortKey === 'price' && data[0].cryptoData.length > 1) {
             console.log("EJECYTO EL SORT CON ORDER BY")
-        //setApidata(apiData.sort((a, b) => b.RAW.USD.MKTCAP - a.RAW.USD.MKTCAP))
-        return orderBy( data, function(e) {return e.RAW.USD.PRICE} , direction )
+            console.log(data[0].cryptoData, "ESTRUCTURA DENTRO DE CRYTPO DATA")
+            //setApidata(apiData.sort((a, b) => b.RAW.USD.MKTCAP - a.RAW.USD.MKTCAP))
+            return orderBy(data[0].cryptoData, function (e) { return e.RAW.USD.PRICE }, direction)
         }
-        if(sortKey === 'pctChange' && data.length > 1){
+        if (sortKey === 'pctChange' && data[0].cryptoData.length > 1) {
             console.log("EJECYTO EL SORT CON ORDER BY")
-        //setApidata(apiData.sort((a, b) => b.RAW.USD.MKTCAP - a.RAW.USD.MKTCAP))
-        return orderBy( data, function(e) {return e.RAW.USD.CHANGEPCT24HOUR} , direction )
+            console.log(data[0].cryptoData, "ESTRUCTURA DENTRO DE CRYTPO DATA")
+            //setApidata(apiData.sort((a, b) => b.RAW.USD.MKTCAP - a.RAW.USD.MKTCAP))
+            return orderBy(data[0].cryptoData, function (e) { return e.RAW.USD.CHANGEPCT24HOUR }, direction)
         }
-        if(sortKey === 'marketCap' && data.length > 1){
+        if (sortKey === 'marketCap' && data[0].cryptoData.length > 1) {
             console.log("EJECYTO EL SORT CON ORDER BY")
-        //setApidata(apiData.sort((a, b) => b.RAW.USD.MKTCAP - a.RAW.USD.MKTCAP))
-        return orderBy( data, function(e) {return e.RAW.USD.MKTCAP} , direction )
+            console.log(data[0].cryptoData, "ESTRUCTURA DENTRO DE CRYTPO DATA")
+            //setApidata(apiData.sort((a, b) => b.RAW.USD.MKTCAP - a.RAW.USD.MKTCAP))
+            return orderBy(data[0].cryptoData, function (e) { return e.RAW.USD.MKTCAP }, direction)
         }
-        else{
-        console.log("OMITO EL SORT")
-        return data
+        else {
+            console.log("OMITO EL SORT")
+            console.log(data[0].cryptoData, "ESTRUCTURA DENTRO DE CRYTPO DATA")
+            return data
         }
     }
 
@@ -94,10 +99,9 @@ export const sortData = createSelector (
 //       // console.log(key, "KEYNAME")
 //       // console.log(sortBy[key], "KEYVALUE")
 //       // console.log(sortBy, "TOTALSTATE----SORT")
-  
+
 //     }  
-  
+
 // }
 
-  
-  
+

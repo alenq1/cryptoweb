@@ -86,7 +86,7 @@ const Home = (props, { apiData }) => {
     //setInterval( () => {fetchData('https://min-api.cryptocompare.com/data/top/totalvolfull?limit=100&tsym=USD')}, 10000)      
     //fetchData('https://min-api.cryptocompare.com/data/top/totalvolfull?limit=100&tsym=USD')
     props.getApiData()
-    props.ConnectWS('ws://localhost/ws/test')
+    props.ConnectWS('ws://192.168.0.2:9000/ws/test')
 
 
     //      console.log(apiData, "APIDATA VACIAAAAAA??????????")

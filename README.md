@@ -13,5 +13,12 @@ Set django Channels
    - add on proxy location to redirect websocket connections, and allowed hostname (container)
    - create routing inside app, and create a test consumer 
    - TODO
-     [] test the websocket communication flow send, proccess and receive messages
-     [] communication with worker or tasks
+   - websocket communication flow send, proccess and receive messages
+   - communication from task to websocket channels groups 
+
+Celery
+   - Set celery tasks configurations on settings and create app for tasks (celery.py)
+   - Crate celery schedule task for periodic execution
+   - Run celery worker with beat monitor
+   - Flower services monitoring celery tasks
+   - Periodic tasks pass values to websocket channel group

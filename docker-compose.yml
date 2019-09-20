@@ -46,7 +46,22 @@ services:
     links:
       - app:app
       - redis:redis
-    
+  
+  flower:
+    <<: *base
+    container_name: flower
+    entrypoint: ['entrypoints/start_task_monitor.sh']
+    volumes:
+      - ./backend:/backend
+    depends_on:
+      - app
+      - redis
+    links:
+      - app:app
+      - redis:redis
+    expose:
+      - "8888"
+
 
   channels:
     <<: *base
@@ -63,8 +78,8 @@ services:
     links:
       - app:app
       - redis:redis
-    expose:
-      - "9000"
+    ports:
+      - "9000:9000"
     
   redis:
     image: redis:alpine

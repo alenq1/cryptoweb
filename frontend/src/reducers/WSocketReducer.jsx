@@ -5,7 +5,11 @@ import {
 
 const initialState = {
     //
-    wsData: [],
+    wsData: [{
+        'cryptoData': '',
+        'explorerInfo': '',
+        'exchangeData': ''
+    }],
     error: '',
     status: 'disconnected'
 };
@@ -17,20 +21,22 @@ const WSocketReducer = (state = initialState, action) => {
         case WEBSOCKET_CONNECTING:
             return {
                 ...state,
-                wsData: action.payload,
                 status: 'connecting'
             };
         case WEBSOCKET_CONNECTED:
             return {
                 ...state,
-                wsData: action.payload,
                 status: 'connected'
             };
 
         case WEBSOCKET_MESSAGE:
             return {
                 ...state,
-                wsData: action.payload,
+                wsData: [{
+                    'cryptoData': action.payload.cryptoData,
+                    'explorerInfo': action.payload.explorerInfo,
+                    'exchangeData': action.payload.exchangeData
+                }],
                 status: 'received message'
             };
         case WEBSOCKET_DISCONNECTED:
