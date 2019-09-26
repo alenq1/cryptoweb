@@ -3,13 +3,13 @@ import { connect } from 'react-redux'
 import { Table } from 'react-bootstrap';
 
 
-const Explorer = (props) => {
+const xChange = (props) => {
 
-  const [data, setData] = useState([])
+  //const [data, setData] = useState([])
 
-  console.log(typeof (props.data), "DATA PARA EXPLORER")
+  console.log(props.data, "DATA PARA EXCHANGE")
   return <div>
-    <h1 className="m-5 align-content-center">Crypto Explorer Data</h1>
+    <h1 className="m-5 align-content-center">Crypto Exchanges Data</h1>
     {!props.data ?
       <h1>NODATA</h1>
       :
@@ -17,24 +17,24 @@ const Explorer = (props) => {
         <thead style={{ color: props.txtColor }}>
           <tr>
             <th>name</th>
-            <th>PoW</th>
-            <th>PoS</th>
-            <th>height</th>
-            <th>diff</th>
-            <th>supply</th>
-            <th>ticker</th>
+            <th>Active</th>
+            <th>WebStatus</th>
+            <th>ApiStatus</th>
+            <th>website</th>
+            <th>currencies</th>
+            <th>markets</th>
           </tr>
         </thead>
         <tbody style={{ color: props.txtColor }}>
-          {Object.keys(props.data).map((line, index) => (
+          {props.data.map((line, index) => (
             <tr>
-              <td>{props.data[line].name}</td>
-              <td>{props.data[line].PoW}</td>
-              <td>{props.data[line].PoS}</td>
-              <td>{props.data[line].height}</td>
-              <td>{props.data[line].diff}</td>
-              <td>{props.data[line].supply}</td>
-              <td>{props.data[line].ticker.btc}</td>
+              <td>{line.name}</td>
+              <td>{line.active}</td>
+              <td>{line.website_status}</td>
+              <td>{line.api_status}</td>
+              <td>{line.links.website}</td>
+              <td>{line.currencies}</td>
+              <td>{line.markets}</td>
             </tr>
           ))
 
@@ -51,7 +51,7 @@ const Explorer = (props) => {
 
 const mapStateToProps = state => {
   return {
-    data: state.WSocket.wsData[0].explorerInfo,
+    data: state.WSocket.wsData[0].exchangeData,
     color: state.theme.theme.color,
     txtColor: state.theme.theme.textColor
   };
@@ -66,5 +66,5 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Explorer);
+)(xChange);
 

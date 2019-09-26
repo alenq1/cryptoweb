@@ -5,32 +5,21 @@ import { bindActionCreators } from 'redux';
 import { getApiData, getChartData } from '../actions/apiData';
 import { setSort } from '../actions/sort';
 import { sortData } from '../selectors/sortData';
+import { Table } from 'react-bootstrap'
 
 const stythtd = {
   padding: '20px',
-
   borderColor: 'black'
 };
 
 const Tables = (props, { color, txtColor, apiDatas, apiData }) => {
-  //console.log(props.coindata.data, "COINDATA")
 
+  //console.log(props.coindata.data, "COINDATA")
   //console.log(props, "TODAS PROPS EN TABLLLLLAAAAAAA")
   //console.log(props.apiData, "PROPS EN TABALAS")
   //console.log(props.apiDatas, "APIDATAA DE SELECTORRRRRRRRRRRR")
-
-  const Sortedws = (array, socketconn) => {
-    // sorted by Last Price Desc
-    //console.log(socketconn, "socket antes")
-    //socketconn.close()
-    //console.log(socketconn, "socket despues")
-    //let newsort = array.sort((a, b) => b.symbol - a.symbol)
-    //console.log(newsort, "SORTED")
-    //return newsort
-  };
-
-  //Websocket data
   //props.data.sort((a, b) => b.c - a.c)
+
   const lol = symbol => {
     console.log('LOL APRETADO con', symbol);
     //props.getChartData(symbol, 10);
@@ -41,14 +30,17 @@ const Tables = (props, { color, txtColor, apiDatas, apiData }) => {
 
   return (
     <React.Fragment>
-      <table
-        className='table-borderless table-hover table-striped hover m-4 p-4'
+      <Table responsive
+        borderless
+        hover
+        striped
+        className='m-4 p-4'
         variant='dark'>
         <thead
-          style={{ background: '#004e92', color: 'whitesmoke', height: '60%' }}>
+          style={{ background: '#004e92', color: 'whitesmoke' }}>
           <tr style={{ padding: '2em', textAlign: 'center' }}>
-            <th style={stythtd}>Rank</th>
-            <th style={stythtd}>Name</th>
+            <th style={{ ...stythtd }}>Rank</th>
+            <th style={{ ...stythtd, textAlign: 'left' }}>Name</th>
             <th style={stythtd} onClick={() => props.setSort('price')}>
               Last Price
             </th>
@@ -66,7 +58,7 @@ const Tables = (props, { color, txtColor, apiDatas, apiData }) => {
           style={{
             color: props.txtColor === 'whitesmoke' ? 'whitesmoke' : 'black',
             textAlign: 'left',
-            backgroundColor: props.color === 'black' ? '#232526' : 'white'
+            backgroundColor: props.color === 'black' ? '#232526' : 'whitesmoke'
           }}>
           {!props.apiDatas[0].CoinInfo
             ? 0
@@ -75,8 +67,8 @@ const Tables = (props, { color, txtColor, apiDatas, apiData }) => {
                 style={{ padding: '2em' }}
                 key={index}
                 onClick={() => lol(coin.CoinInfo.Name)}>
-                <td style={stythtd}>{index + 1} </td>
-                <td style={{ ...stythtd, textAlign: 'left' }}>
+                <td style={{ ...stythtd, overflowY: 'auto' }}>{index + 1} </td>
+                <td style={{ ...stythtd, textAlign: 'left', overflowY: 'auto' }}>
                   <img
                     src={`https://www.cryptocompare.com/${coin.CoinInfo.ImageUrl}`}
                     height='20px'
@@ -106,16 +98,16 @@ const Tables = (props, { color, txtColor, apiDatas, apiData }) => {
               </tr>
             ))}
         </tbody>
-      </table>
-    </React.Fragment>
+      </Table>
+    </React.Fragment >
   );
 };
 
 const mapStateToProps = state => {
   return {
     apiDatas: sortData(state),
-    color: state.themeReducer.theme.color,
-    txtColor: state.themeReducer.theme.textColor
+    color: state.theme.theme.color,
+    txtColor: state.theme.theme.textColor
   };
 };
 

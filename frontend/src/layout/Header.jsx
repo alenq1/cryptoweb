@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Nav, Navbar, Form, FormControl } from 'react-bootstrap'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -9,7 +9,8 @@ import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
 import InputBase from '@material-ui/core/InputBase'
 import Switch from '@material-ui/core/Switch'
-import { FaBuffer, FaSearch, FaSun, FaMoon, Fa } from 'react-icons/fa'
+import { FaBuffer, FaSearch } from 'react-icons/fa'
+import { IoIosCube, IoIosMoon, IoMdSunny, IoMdSearch } from 'react-icons/io'
 import coin from 'cryptocurrency-icons/svg/color/generic.svg'
 import { Link, withRouter } from 'react-router-dom'
 import setThemeAction from '../actions/Theme'
@@ -23,6 +24,8 @@ const style = {
 }
 
 const Header = props => {
+
+  const [checked, Check] = useState(false)
   const ThemeButton = withStyles(theme => ({
     root: {
       color: props.txtColor,
@@ -63,17 +66,19 @@ const Header = props => {
   console.log(props, 'PROS DE HEADERS')
   return (
     <>
-      <AppBar position='static' style={theme}>
-        <Toolbar>
-          <IconButton
-            edge='start'
-            className='nn'
-            color='inherit'
-            aria-label='menu'
-            onClick={() => props.history.push('/')}>
-            <FaBuffer color={props.color} />
-          </IconButton>
-          <ThemeButton>CryptoCenter</ThemeButton>
+      <Navbar collapseOnSelect expand="lg" className='sticky-top' style={theme}>
+
+        <IconButton
+          edge='start'
+          className='nn'
+          color='inherit'
+          aria-label='menu'
+          onClick={() => props.history.push('/')}>
+          <IoIosCube size='1.5em' color={props.txtColor} />
+        </IconButton>
+        <ThemeButton>CryptoCenter</ThemeButton>
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className='ml-auto'>
             <ThemeButton
               style={theme}
@@ -102,30 +107,32 @@ const Header = props => {
             <ThemeButton
               href=''
               style={theme}
-              onClick={() => props.history.push('/cchange')}>
+              onClick={() => props.history.push('/xchange')}>
               CoinChange
             </ThemeButton>
           </Nav>
+        </Navbar.Collapse>
+        <IoMdSearch size='1.5em' color={props.txtColor} />
 
-          <FaSearch />
+        <Form inline>
+          <FormControl type='text' placeholder='Search' className='mr-sm-2' />
 
-          <Form inline>
-            <FormControl type='text' placeholder='Search' className='mr-sm-2' />
-            <ThemeButton href='#pricing' style={theme}>
-              Search
-            </ThemeButton>
-            <FaSun color={props.color} />
-            <ThemeSwitch
-              onClick={() =>
-                props.setThemeAction(
-                  props.color === 'black' ? 'whitesmoke' : 'black'
-                )
-              }
-            />
-            <FaMoon style={{ color: props.color }} />
-          </Form>
-        </Toolbar>
-      </AppBar>
+          <IoMdSunny size='1.5em' color={props.txtColor} />
+          <ThemeSwitch
+            checked={checked}
+            onClick={() => {
+              props.setThemeAction(
+                props.color === 'black' ? 'whitesmoke' : 'black'
+
+              )
+              Check(!checked)
+            }
+            }
+          />
+          <IoIosMoon size='1.5em' style={{ color: props.txtColor }} />
+        </Form>
+
+      </Navbar>
     </>
   )
 }
@@ -136,8 +143,8 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = state => {
   return {
-    color: state.themeReducer.theme.color,
-    txtColor: state.themeReducer.theme.textColor
+    color: state.theme.theme.color,
+    txtColor: state.theme.theme.textColor
   }
 }
 

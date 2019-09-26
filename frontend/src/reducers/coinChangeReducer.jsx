@@ -4,6 +4,7 @@ import {
     ERROR_GET_COINCHANGE
 } from '../constants/action-types';
 
+
 const initialState = {
     coinChangeData: localStorage.getItem('coinChangedata')
         ? JSON.parse(localStorage.getItem('coinChangedata'))
@@ -11,6 +12,7 @@ const initialState = {
     error: '',
     loadingch: false
 };
+
 const coinChangeReducer = (state = initialState, action) => {
     //console.log(action.payload, "PAYLOAD PARA CAMBIAR")
     switch (action.type) {

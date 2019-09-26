@@ -4,6 +4,7 @@ import {
     ERROR_GET_EXPLORER
 } from '../constants/action-types';
 
+
 const initialState = {
     explorerData: localStorage.getItem('explorerData')
         ? JSON.parse(localStorage.getItem('explorerData'))
@@ -11,6 +12,8 @@ const initialState = {
     error: '',
     loadingch: false
 };
+
+
 const explorerReducer = (state = initialState, action) => {
     //console.log(action.payload, "PAYLOAD PARA CAMBIAR")
     switch (action.type) {

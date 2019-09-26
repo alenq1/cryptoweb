@@ -1,16 +1,16 @@
 import { createSelector } from 'reselect'
-import {orderBy} from 'lodash'
-import {getChartData} from '../actions/apiData'
-                                
-
-const rawData = state => state.apiDataReducer && state.apiDataReducer.apiData
-const getKey = state => state.apiDataReducer && state.apiDataReducer.sortKey
-const getDirection = state => state.apiDataReducer &&  state.apiDataReducer.sortDirection
+import { orderBy } from 'lodash'
+import { getChartData } from '../actions/apiData'
 
 
-export const TopCharts = createSelector (
+const rawData = state => state.apiData && state.apiData.apiData
+const getKey = state => state.apiData && state.apiData.sortKey
+const getDirection = state => state.apiData && state.apiData.sortDirection
 
-    
+
+export const TopCharts = createSelector(
+
+
     [rawData, getKey, getDirection],
 
     (data, sortKey, direction) => {
@@ -19,25 +19,25 @@ export const TopCharts = createSelector (
         console.log(sortKey, "GETKEY")
         console.log(direction, "GET DIRECTIRO")
 
-    
-    const numberTop = (numTop) => {
 
-        if(data.length > 1 ){
-            let Coinlist = []
-            for(let topCrypto = 0; topCrypto <= numTop; topCrypto++){
-                console.log(data[topCrypto].CoinInfo.Name, "SYMBOLO PARA BUSCAR DATA")
-                Coinlist.push(data[topCrypto].CoinInfo.Name)
-                
-            }   
-        return Coinlist
-        
-    }
-        else{
-            return null
+        const numberTop = (numTop) => {
+
+            if (data.length > 1) {
+                let Coinlist = []
+                for (let topCrypto = 0; topCrypto <= numTop; topCrypto++) {
+                    console.log(data[topCrypto].CoinInfo.Name, "SYMBOLO PARA BUSCAR DATA")
+                    Coinlist.push(data[topCrypto].CoinInfo.Name)
+
+                }
+                return Coinlist
+
+            }
+            else {
+                return null
+            }
+
+
         }
-    
-    
-    }
-    return numberTop(10)
+        return numberTop(10)
 
-})
+    })

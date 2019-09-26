@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { WhisperSpinner } from 'react-spinners-kit'
 import { getChartData } from '../actions/apiData';
 import { TopCharts } from '../selectors/TopCharts';
 import { connect } from 'react-redux';
@@ -20,13 +21,13 @@ import { red } from '@material-ui/core/colors';
 const mapStateToProps = state => {
   return {
     cryptoCharts: TopCharts(state),
-    //datanews: state.newsReducer.datanews,
+    //datanews: state.news.datanews,
     //loadingrx: state.newsReducer.loading,
-    chartData: state.chartReducer.chartData,
-    loadingch: state.chartReducer.loadingch,
-    //error: state.newsReducer.error,
-    //latestnews: state.newsReducer.latestnews
-    theme: state.themeReducer.theme
+    chartData: state.chart.chartData,
+    loadingch: state.chart.loadingch,
+    //error: state.news.error,
+    //latestnews: state.news.latestnews
+    theme: state.theme.theme
   };
 };
 
@@ -44,8 +45,6 @@ const BaseCharts = ({
   theme
 }) => {
   useEffect(() => {
-    //getNews()
-    //  getApiNews()
 
     console.log(cryptoCharts, 'LISTADO DE COINS A BUSKAR ');
 
@@ -58,7 +57,17 @@ const BaseCharts = ({
       <h1 className='m-5'>Top Crtpto Charts</h1>
       <div className='row p-3 m-3'>
         {loadingch ? (
-          <p>LOADING....</p>
+          <center>
+            <h1 className='mt-5'>Loading...</h1>
+            <WhisperSpinner
+              size='500'
+              color="#686769"
+              loading='true'
+              frontColor="#386769"
+              backColor="#646459"
+              className="mt-5"
+            />
+          </center>
         ) : !chartData ? (
           <p>ERROR</p>
         ) : (

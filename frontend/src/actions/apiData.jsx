@@ -41,7 +41,9 @@ export const getApiData = () => dispatch => {
 }
 
 export const getApiNews = () => dispatch => {
+
   dispatch({ type: LOADING_FETCH })
+
   axios('api/news/')
     .then(data => {
       if (!data.data['error']) {
@@ -57,18 +59,18 @@ export const getApiNews = () => dispatch => {
 }
 
 export const getLatest = site => dispatch => {
-  console.log(site, 'PETICON PARA BUSCAR')
+  //console.log(site, 'PETICON PARA BUSCAR')
+
   dispatch({ type: LOADING_FETCH })
-  axios
-    .post(
-      'api/news/',
-      { searchsite: site },
-      {
-        headers: {
-          'Content-Type': 'application/json'
-        }
+  axios.post(
+    'api/news/',
+    { searchsite: site },
+    {
+      headers: {
+        'Content-Type': 'application/json'
       }
-    )
+    }
+  )
 
     .then(data => {
       dispatch({ type: GET_LATEST, payload: data.data })
@@ -175,35 +177,3 @@ export const getExplorers = () => dispatch => {
     })
 }
 
-
-
-
-
-
-
-
-
-
-
-// export const fetchData = () => {
-//   return dispatch => {
-//       const promises = [];
-
-//       dispatch({type: FETCHING_DATA});
-//       Promise.all(
-//         [...new Array(3)].map((ignore,i)=>i === 0 ? 0 : (i + "01"))
-//         .map(
-//           start=>axios.get(`${api_root_url}/v1/?start=${start}`)
-//         )
-//       ).then(
-//         results=>results.forEach(
-//           result=>
-//             dispatch({type: FETCH_DATA_SUCESS, payload: result.data})
-//           )
-//       ).catch(
-//         err => dispatch({type: FETCH_DATA_ERR, payload: err.data})
-//       );
-//       //not sure why you want to return something here
-//       //return Promise.all(promises)
-//   }
-// }

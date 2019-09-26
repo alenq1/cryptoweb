@@ -14,8 +14,9 @@ from .scraper import get_page, scrap_news_sites, get_site_content, get_wallet_in
 
 # Create your views here.
 urls = ['https://cryptolinks.com/',
-        'https://blog.feedspot.com/cryptocurrency_blogs/',
+        'https://detailed.com/cryptocurrency-blogs/',
         'https://blog.feedspot.com/bitcoin_blogs/',
+        'https://blog.feedspot.com/cryptocurrency_blogs/'
         ]
 
 

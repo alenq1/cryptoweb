@@ -28,7 +28,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 #DEBUG = True
 DEBUG = int(os.environ.get('DEBUG', default=0))
 
-ALLOWED_HOSTS = ['proxy', 'localhost', 'app', '172.19.0.4', 'frontend', 'channels']
+ALLOWED_HOSTS = ['proxy', 'localhost', 'app', '172.19.0.4', 'frontend', 'channels', 'websocket']
 
 
 # Application definition
@@ -78,33 +78,12 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'backend.wsgi.application'
-
-
 ASGI_APPLICATION = 'backend.routing.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-
-# DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#    }
-# }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'app',
-#         'USER': 'db1user',
-#         'PASSWORD': 'db1passwd',
-#         'HOST': 'db',  # <-- IMPORTANT: same name as docker-compose service!
-#         'PORT': '5432',
-#     }
-# }
-
 
 DATABASES = {
     'default': {
@@ -171,19 +150,9 @@ MEDIA_ROOT = os.path.join(os.path.dirname(
 
 # CELERY SETTINGS
 
-# from celery.schedules import crontab
 
-# CELERY_BEAT_SCHEDULE = {
-#  'crypto_api_request': {
-#        'task': 'crypto.scraper.get_api_data',
-#         # 
-#        'schedule': crontab(seconds=10),
-#         # 
-#     }
-#}
-
-CELERY_BROKER_URL = 'redis://redis:6379'
-CELERY_RESULT_BACKEND = 'redis://redis:6379'
+CELERY_BROKER_URL = (os.environ.get('CELERY_BROKER_URL', 'redis://redis:6379'))
+CELERY_RESULT_BACKEND = (os.environ.get('CELERY_RESULT_BACKEND', 'redis://redis:6379'))
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
@@ -201,7 +170,3 @@ CHANNEL_LAYERS = {
         # "ROUTING": "scrap.routing.channel_routing",  # buscar el routing
     },
 }
-
-
-
-

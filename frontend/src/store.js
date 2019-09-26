@@ -15,14 +15,14 @@ import WSocketReducer from './reducers/WSocketReducer'
 import thunk from 'redux-thunk'
 
 const reducers = combineReducers({
-  themeReducer,
-  apiDataReducer,
-  newsReducer,
-  chartReducer,
-  walletsReducer,
-  explorerReducer,
-  coinChangeReducer,
-  WSocketReducer
+  theme: themeReducer,
+  apiData: apiDataReducer,
+  news: newsReducer,
+  chart: chartReducer,
+  wallets: walletsReducer,
+  explorer: explorerReducer,
+  xchange: coinChangeReducer,
+  WSocket: WSocketReducer
 })
 const storeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 

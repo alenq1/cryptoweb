@@ -1,8 +1,8 @@
 import {
     WEBSOCKET_CONNECT, WEBSOCKET_CONNECTING, WEBSOCKET_CONNECTED,
-    WEBSOCKET_MESSAGE, WEBSOCKET_DISCONNECT, WEBSOCKET_DISCONNECTED
+    WEBSOCKET_MESSAGE, WEBSOCKET_DISCONNECT, WEBSOCKET_DISCONNECTED,
+    WEBSOCKET_ERROR
 } from '../constants/action-types'
-
 
 
 export const ConnectWS = (wsUrl) => dispatch => {
@@ -35,12 +35,14 @@ export const ConnectWS = (wsUrl) => dispatch => {
                 'exchangeData': JSON.parse(event.data).message.exchangeData
             }
         })
+
+        localStorage.setItem('apiData', JSON.stringify(JSON.parse(event.data).message.cryptoData.Data))
         //       showData(JSON.parse(event.data))
     }
     wsconn.onerror = function (event) {
         //       console.error('an error occurred', event.data);
         console.log("ERRROR DE WSSSSSSS");
-        dispatch({ type: WEBSOCKET_MESSAGE, payload: event.data })
+        dispatch({ type: WEBSOCKET_ERROR, payload: event.data })
     }
 
     wsconn.onclose = function (event) {

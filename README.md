@@ -22,3 +22,8 @@ Celery
    - Run celery worker with beat monitor
    - Flower services monitoring celery tasks
    - Periodic tasks pass values to websocket channel group
+   - Setting multithreadind on periodic task for concurrent requests
+
+Frontend
+   - Setting Reducer for websocket incoming data, and actions for save into store
+   - Changing get data from werbsocket data store to components 

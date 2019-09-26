@@ -1,12 +1,15 @@
 import {
     WEBSOCKET_CONNECT, WEBSOCKET_CONNECTING, WEBSOCKET_CONNECTED,
-    WEBSOCKET_MESSAGE, WEBSOCKET_DISCONNECT, WEBSOCKET_DISCONNECTED
+    WEBSOCKET_MESSAGE, WEBSOCKET_DISCONNECT, WEBSOCKET_DISCONNECTED,
+    WEBSOCKET_ERROR
 } from '../constants/action-types';
 
 const initialState = {
     //
     wsData: [{
-        'cryptoData': '',
+        'cryptoData': localStorage.getItem('apiData')
+            ? JSON.parse(localStorage.getItem('apiData'))
+            : '',
         'explorerInfo': '',
         'exchangeData': ''
     }],
@@ -42,8 +45,14 @@ const WSocketReducer = (state = initialState, action) => {
         case WEBSOCKET_DISCONNECTED:
             return {
                 ...state,
-                wsData: action.payload,
                 status: 'disconnected'
+            };
+
+        case WEBSOCKET_ERROR:
+            return {
+                ...state,
+                error: action.payload,
+                status: 'error'
             };
 
         default:

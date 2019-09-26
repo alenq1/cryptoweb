@@ -1,13 +1,15 @@
 version: "3.4"
 
 x-base: &base
-    env_file: backend/env
+    env_file: backend/.env
     build: 
       context : backend/
       dockerfile: Dockerfile
       #target: local
       args: 
-       - SCENARIO=local
+       - SCENARIO=local 
+       - PYTHON_VBASE=3.7.4-slim-buster
+       - PYTHON_VFINAL=3.7.4-slim-buster
 
 services:
   db:
@@ -27,6 +29,9 @@ services:
       - ./backend/media:/backend/media  # <-- bind the media volume
     healthcheck:
       test: curl --fail http://localhost:8000/admin/ || exit
+      interval: 1m
+      timeout: 10s
+      retries: 3
     depends_on: 
       - db 
     links:
@@ -71,6 +76,9 @@ services:
       - ./backend:/backend
     healthcheck:
       test: curl --fail http://localhost:9000/admin/ || exit
+      interval: 1m
+      timeout: 10s
+      retries: 3
     depends_on:
       - db
       - app
@@ -78,8 +86,9 @@ services:
     links:
       - app:app
       - redis:redis
-    ports:
-      - "9000:9000"
+      - db:db
+    expose:
+      - "9000"
     
   redis:
     image: redis:alpine
@@ -115,6 +124,7 @@ services:
       - "443:443"
     links:
       - app:app
+      - channels:channels
     depends_on:
       - app
 volumes:

@@ -4,30 +4,18 @@ import time
 import json
 import re
 import logging
+from bs4 import BeautifulSoup
 import concurrent.futures
 from celery import shared_task
 from celery.task.schedules import crontab
 from celery.decorators import periodic_task
 from backend.celery import celery_app
 
-from bs4 import BeautifulSoup
+
 ##
 from celery.utils.log import get_logger
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
-
-
-
-# celery_app.conf.beat_schedule = {
-#     # Executes every Monday morning at 7:30 a.m.
-#     'SCARP_API_DATA': {
-#         'task': 'shared_task.get_api_data',
-#         'schedule': crontab(),
-#         'args': (),
-#     },
-# }
-
-
 
 
 def get_page(url):
@@ -58,28 +46,47 @@ def scrap_news_sites(to_scrap):
         # METHOD FOR SCRAP THR SITE
         # INITAL BLOCK SELECTION
     response = []
-    selection = to_scrap.find('div', {'id': 'fsb'})
-    # GET TITLES SECTION
-    title = selection.find_all('h3')
-    # CREATE TEMP LIST FOR GET TAGS ID
-    tmplist = []
+    try:
+        ###FOR NEWS SOURCE
+        selection = to_scrap.find_all('tr', {'class': 'photography-wrapper'})
 
-    for lista in title:
-        tmplist.append(lista.get("id")[1:])
+        # selection = to_scrap.find('div', {'id': 'fsb'})
+        # # GET TITLES SECTION
+        # title = selection.find_all('h3')
+        # # CREATE TEMP LIST FOR GET TAGS ID
+        # tmplist = []
 
-        # LOOP FOR GET EACH TITLE SITE
-    for lista in title:
-        response.append({'site': lista.getText(), 'link': '',
-                         'content': '', 'image': ''})
-        # LOOP FOR GET EACH IMAGE LINK SITE
-    for index, lista in enumerate(tmplist):
-        response[index]['image'] = (
-            ((selection.find('p', {'data': lista})).find('img')).get('data-lazy-src'))
+        # for lista in title:
+        #     tmplist.append(lista.get("id")[1:])
 
-    for index, lista in enumerate(tmplist):
-        response[index]['link'] = (
-            ((selection.find('p', {'data': lista})).find('a')).get('href'))
+        #     # LOOP FOR GET EACH TITLE SITE
+        # for lista in title:
+        #     response.append({'site': lista.getText(), 'link': '',
+        #                     'content': '', 'image': ''})
 
+        for line in selection:
+            response.append({
+            'site': line.find('h3').getText(), 
+            'link': line.find('a').get('href'), 'content': '',
+            'description': line.find('span', {'class', 'blog-description'}).getText(),
+            'image': line.find('img').get('src'), 
+            'rank': line.find('p', {'class': 'blog-counting rank'}).getText(), 
+            'mentions': line.find('p', {'class': 'blog-counting mention'}).getText()
+            })
+
+
+            # LOOP FOR GET EACH IMAGE LINK SITE
+        # for index, lista in enumerate(tmplist):
+        #     response[index]['image'] = (
+        #         ((selection.find('p', {'data': lista})).find('img')).get('data-lazy-src'))
+
+        # for index, lista in enumerate(tmplist):
+        #     response[index]['link'] = (
+        #         ((selection.find('p', {'data': lista})).find('a')).get('href'))
+
+    except AttributeError as e:
+        response = [{'error': str(e)}]
+        return response
     print(response, 'RESPUESTA PARA M<ANDAR')
     return response
 
@@ -88,9 +95,13 @@ def get_site_content(to_scrap, keyword):
 
     #selection = to_scrap.find('a')
     try:
-        selection = to_scrap.find_all('a', href=re.compile(keyword))
+        
+        selection = to_scrap.find_all('a', href=re.compile(keyword))[1:6]
+        
         response = [{'url': content.get(
-            'href'), 'title': content.getText()} for content in selection]
+            'href'), 'title': " ".join(content.getText().split())} for content in selection]
+        # filter_title = " ".join(content.getText().split()) fo
+        # print(filter_title, "TITULO FILTRADO")
         return response
 
     except (AttributeError, KeyError) as ex:
@@ -108,31 +119,31 @@ def add(a, b):
 def get_api_data():
     
     sites_to_get_data = [{'page': 'cryptoData', 'url':'https://min-api.cryptocompare.com/data/top/totalvolfull?limit=100&tsym=USD'},
+                        {'page': 'exchangeData', 'url':'https://api.coinpaprika.com/v1/exchanges'},
                         {'page': 'explorerInfo', 'url':'http://chainz.cryptoid.info/explorer/api.dws?q=summary'},
-                        {'page': 'exchangeData', 'url':'https://api.coinpaprika.com/v1/exchanges'}]
-
+                        ]
+    
+    #SET FUCNTIONS FOR EXECUTING CONCURRENT REQUESTS
     def get_site(url):
-        return requests.get(url)
+        print("CONECTANDO A SITIO", url)
+        return requests.get(url, timeout=5)
     
     def get_all_sites(urls):
         with concurrent.futures.ThreadPoolExecutor(max_workers=len(sites_to_get_data)) as executor:
             return list(executor.map(get_site, urls))
-
-    #api = requests.get('https://min-api.cryptocompare.com/data/top/totalvolfull?limit=100&tsym=USD')
-    #data_to_client = api.json()
 
     only_sites = [urls['url'] for urls in sites_to_get_data ]
     data_to_client = [responses.json() for responses in get_all_sites(only_sites)]
 
     print(data_to_client[0]['Data'][0]['CoinInfo'], "ME EJECUTARON COMO TAREA PERIRODICA")
     
-    #return api
-    #return data_to_client
+    # CALLING WEBSOCKET GROUP TO SEND REQUESTS RESULTS
+
     channel_layer = get_channel_layer()
     logger = logging.getLogger()
     print("ESTES ESSSSS CHANNEL LAYYYYYYER", channel_layer)
 
-    async_to_sync(channel_layer.group_send)('crypto', {
+    return async_to_sync(channel_layer.group_send)('crypto', {
         'type': 'send.broadcast' ,
         sites_to_get_data[0]['page']: data_to_client[0],
         sites_to_get_data[1]['page']: data_to_client[1],
@@ -174,5 +185,6 @@ def get_wallet_info(to_scrap):
     # for i in range(len(response)):
     #     for k, v in response[i]['categories'].items():
     #         tmplist.append(k)
+
 if __name__ == "__main__":
     pass

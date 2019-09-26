@@ -9,6 +9,9 @@ const initialState = {
   loading: false,
   error: ''
 }
+
+
+
 const walletsReducer = (state = initialState, action) => {
   //console.log(action.payload, "PAYLOAD PARA CAMBIAR")
   switch (action.type) {

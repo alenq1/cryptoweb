@@ -5,9 +5,12 @@ const initialState = {
   apiData: localStorage.getItem('apiData')
     ? JSON.parse(localStorage.getItem('apiData'))
     : [0],
-  sortKey: 'price',
+  sortKey: 'marketCap',
   sortDirection: 'desc'
 };
+
+
+
 const apiDataReducer = (state = initialState, action) => {
   //console.log(action.payload, "PAYLOAD PARA CAMBIAR")
   switch (action.type) {
@@ -32,4 +35,5 @@ const apiDataReducer = (state = initialState, action) => {
       return state;
   }
 };
+
 export default apiDataReducer;

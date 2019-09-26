@@ -8,7 +8,7 @@ import News from '../pages/News'
 import Charts from '../pages/Charts'
 import Wallets from '../pages/Wallets'
 import Explorer from '../pages/Explorer'
-import CoinChange from '../pages/CoinChange'
+import xChange from '../pages/xChange'
 import { createBrowserHistory } from 'history'
 import { Router, Route, Switch } from 'react-router-dom'
 
@@ -16,8 +16,8 @@ const hist = createBrowserHistory()
 
 const mapStateToProps = state => {
   return {
-    color: state.themeReducer.theme.color,
-    txtColor: state.themeReducer.theme.textColor
+    color: state.theme.theme.color,
+    txtColor: state.theme.theme.textColor
   }
 }
 
@@ -41,7 +41,7 @@ const Main = ({ color, txtColor }) => {
           <Route exact path='/charts' component={Charts} />
           <Route exact path='/wallets' component={Wallets} />
           <Route exact path='/explorer' component={Explorer} />
-          <Route exact path='/change' component={CoinChange} />
+          <Route exact path='/xchange' component={xChange} />
         </Switch>
         <Footer />
       </Router>

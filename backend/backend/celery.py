@@ -3,8 +3,6 @@ from celery import Celery
 from celery.schedules import crontab
 
 
-
-
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 celery_app = Celery('crypto')
 celery_app.config_from_object('django.conf:settings', namespace='CELERY')
@@ -15,11 +13,14 @@ celery_app.autodiscover_tasks()
 def debug_task(self):
     print('Request: {0!r}'.format(self.request))
 
+
+# SETTINGS FOR PERIODIC TASKS SCHEDULE
+
 celery_app.conf.beat_schedule = {
-     # Executes every Monday morning at 7:30 a.m.
+     # Executes every 15 seconds to requests apis
      'SCARP_API_DATA': {
          'task': 'crypto.scraper.get_api_data',
-         'schedule': 15,
+         'schedule': 5,
          'args': (),
      },
 }

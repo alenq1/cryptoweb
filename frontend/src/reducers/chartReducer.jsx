@@ -11,6 +11,8 @@ const initialState = {
   error: '',
   loadingch: false
 };
+
+
 const chartReducer = (state = initialState, action) => {
   //console.log(action.payload, "PAYLOAD PARA CAMBIAR")
   switch (action.type) {
