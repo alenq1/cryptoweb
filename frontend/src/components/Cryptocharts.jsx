@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactEcharts from 'echarts-for-react';
 import moment from 'moment';
+import { connect } from 'react-redux'
 
 var timedata = [];
 var valuedata = [];
@@ -35,7 +36,7 @@ const Linecharts = props => {
     },
     tooltip: {
       trigger: 'axis',
-      formatter: function(params) {
+      formatter: function (params) {
         params = params[0];
         var date = new Date(params.name);
         return (
@@ -78,7 +79,7 @@ const Linecharts = props => {
     ]
   };
 
-  setInterval(function() {
+  setInterval(function () {
     for (var i = 0; i < 5; i++) {
       data.shift();
       data.push(randomData());
@@ -103,41 +104,62 @@ const Linecharts = props => {
 
 export default Linecharts;
 
-export const Line2 = props => {
+const RawLine2 = props => {
   console.log(props, 'PROPS DE LINE2');
   console.log(props.data, 'DATA PARA CREAR TIEMP0 Y CLOSE');
+  console.log(typeof (props.data), "TIPO DE PROPS DATA");
 
-  let chartTime = [];
-
-  props.data.map(rawtime => {
-    chartTime.push(moment(rawtime.time).format('LT'));
-  });
-
+  let chartDate = [];
   let chartData = [];
-  props.data.map(rawtime => {
-    chartData.push(rawtime.close);
-  });
 
-  //console.log(chartTime, chartData, 'DATA LINE')
+  if (props.data) {
+    Object.keys(props.data).map((line, index) => {
+      //console.log(props.data[line], "QUIEN CONO SOY")
+      chartDate.push(moment(props.data[line].time).format('LT'))
+      chartData.push(props.data[line].close)
+    })
+  }
+
+
+  console.log(props.chartime, 'PARA DIVIDIR GRAPHIC')
 
   const option = {
     textStyle: {
       color: '#000000'
     },
+    grid: {
+
+      borderColor: '#ffffff',
+    },
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'cross',
+        label: {
+          backgroundColor: '#6a7985'
+        }
+      }
+    },
     xAxis: {
       type: 'category',
       boundaryGap: false,
-      data: chartTime
+      splitNumber: 5,
+      data: chartDate,
+      splitLine: { show: false }
     },
     yAxis: {
-      type: 'value'
+      type: 'value',
+      splitLine: { show: false },
+      // FOR BETTER VISUALIZATION IN START AXIS VALUE
+      min: chartData[0] / 1.5
     },
     series: [
       {
         name: 'BTC',
         data: chartData,
         type: 'line',
-        areaStyle: {}
+        areaStyle: {},
+        datasetIndex: 20
       }
     ]
   };
@@ -176,6 +198,16 @@ export const Line2 = props => {
     </center>
   );
 };
+const mapStateToProps = state => {
+  return {
+    color: state.theme.theme.color,
+    txtColor: state.theme.theme.textColor
+  }
+}
+
+export const Line2 = connect(mapStateToProps)(RawLine2)
+
+
 
 export const Line3 = props => {
   const option = {
@@ -212,7 +244,7 @@ export const Line3 = props => {
       {
         type: 'category',
         boundaryGap: true,
-        data: (function() {
+        data: (function () {
           var now = new Date();
           var res = [];
           var len = 10;
@@ -226,7 +258,7 @@ export const Line3 = props => {
       {
         type: 'category',
         boundaryGap: true,
-        data: (function() {
+        data: (function () {
           var res = [];
           var len = 10;
           while (len--) {
@@ -260,7 +292,7 @@ export const Line3 = props => {
         type: 'bar',
         xAxisIndex: 1,
         yAxisIndex: 1,
-        data: (function() {
+        data: (function () {
           var res = [];
           var len = 10;
           while (len--) {
@@ -272,7 +304,7 @@ export const Line3 = props => {
       {
         name: '最新成交价',
         type: 'line',
-        data: (function() {
+        data: (function () {
           var res = [];
           var len = 0;
           while (len < 10) {
@@ -287,7 +319,7 @@ export const Line3 = props => {
 
   // app.count = 11;
   const app = 11;
-  setInterval(function() {
+  setInterval(function () {
     const axisData = new Date().toLocaleTimeString().replace(/^\D*/, '');
 
     var data0 = option.series[0].data;

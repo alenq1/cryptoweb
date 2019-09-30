@@ -13,7 +13,8 @@ from .scraper import get_page, scrap_news_sites, get_site_content, get_wallet_in
 
 
 # Create your views here.
-urls = ['https://cryptolinks.com/',
+urls = [
+        'https://min-api.cryptocompare.com/data/wallets/general?api_key=f58c657e5cc22ea83a0d2c759e6e4a7ff172e92716e603aff9d3b5eeec2076ac',
         'https://detailed.com/cryptocurrency-blogs/',
         'https://blog.feedspot.com/bitcoin_blogs/',
         'https://blog.feedspot.com/cryptocurrency_blogs/'
@@ -46,9 +47,9 @@ class WalletsApi(APIView):
     def get(self, request, *args, **kwargs):
 
         print(request, "REQUEST DESDE EL BROWSER")
-        page_to_scrap = get_page(urls[0])
+        page = get_page(urls[0], False)
 
-        return Response(get_wallet_info(page_to_scrap), status=status.HTTP_200_OK)
+        return Response(page, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         print(request.data['searchsite'], "DATA ENVIAD")

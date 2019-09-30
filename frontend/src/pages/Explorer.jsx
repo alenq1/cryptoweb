@@ -8,13 +8,18 @@ const Explorer = (props) => {
   const [data, setData] = useState([])
 
   console.log(typeof (props.data), "DATA PARA EXPLORER")
-  return <div>
-    <h1 className="m-5 align-content-center">Crypto Explorer Data</h1>
+  return <div className='col-lg-12 col-sm-12  align-content-center p-5'>
+    <h1 className="m-5">Crypto Explorer Data</h1>
     {!props.data ?
       <h1>NODATA</h1>
       :
-      <Table>
-        <thead style={{ color: props.txtColor }}>
+      <Table responsive
+        borderless
+        hover
+        striped
+        className='m-auto p-lg-4 m-sm-auto p-4'
+        variant='dark'>
+        <thead style={{ background: 'linear-gradient(to right, #23074d, #cc5333', color: props.txtColor }}>
           <tr>
             <th>name</th>
             <th>PoW</th>

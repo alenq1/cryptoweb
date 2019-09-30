@@ -83,12 +83,12 @@ export const getLatest = site => dispatch => {
 }
 
 ///////////////////////
-export const getChartData = (topsymbol, limit) => dispatch => {
+export const getChartData = (topsymbol, limit, timechart) => dispatch => {
   const localChartData = JSON.parse(localStorage.getItem('chartdata'))
 
   console.log(localChartData, 'valor de localstroare data')
-
-  if (localChartData === null || localChartData.length === 0) {
+  console.log(timechart, "PARAEJECUTAR EB CONSUTA API CHART")
+  if (localChartData) {
     console.log('ME JECUTO APIDATA')
     const promises = []
 
@@ -104,7 +104,7 @@ export const getChartData = (topsymbol, limit) => dispatch => {
       topsymbol.map(async symbols => {
         promises.push(
           axios.get(
-            `https://min-api.cryptocompare.com/data/histoday?fsym=${symbols}&tsym=USD&limit=${limit}`
+            `https://min-api.cryptocompare.com/data/histo${timechart}?fsym=${symbols}&tsym=USD&limit=${limit}`
           )
         )
       })
@@ -116,7 +116,7 @@ export const getChartData = (topsymbol, limit) => dispatch => {
           console.log(topsymbol.length, 'ARRAY SYMBOLO')
           for (let i = 0; i < topsymbol.length; i++) {
             chartData.push({
-              time: '1D',
+              time: timechart,
               symbol: topsymbol[i],
               finaldata: data[i].data.Data
             })

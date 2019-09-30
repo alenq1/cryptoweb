@@ -8,15 +8,10 @@ import { connect } from 'react-redux';
 import { Line2 } from './Cryptocharts';
 import { FaRegCaretSquareDown } from 'react-icons/fa';
 import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Collapse from '@material-ui/core/Collapse';
-import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 
 const mapStateToProps = state => {
   return {
@@ -32,7 +27,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  getChartData: (topsymbol, limit) => dispatch(getChartData(topsymbol, limit))
+  getChartData: (topsymbol, limit, timechart) => dispatch(getChartData(topsymbol, limit, timechart))
   //getLatest: (site) => dispatch(getLatest(site))
   //clearSortParams: bindActionCreators(actions.clearSortParams, dispatch)
 });
@@ -44,20 +39,41 @@ const BaseCharts = ({
   loadingch,
   theme
 }) => {
+
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
+    console.log(newValue, 'VALOR PARA BOTOTN DE CHARTS');
+    getChartData(cryptoCharts, 10, newValue);
+    setValue(newValue);
+  };
+
+
   useEffect(() => {
 
     console.log(cryptoCharts, 'LISTADO DE COINS A BUSKAR ');
 
-    getChartData(cryptoCharts, 10);
+    getChartData(cryptoCharts, 10, 'day');
   }, []);
 
   console.log(chartData, 'DATA VOY A PASAR LOS RESULTADOS A CHART');
   return (
     <center>
       <h1 className='m-5'>Top Crtpto Charts</h1>
+      <AppBar position="static" style={{ color: theme.color }}>
+        <Tabs value={chartData[0] ? chartData[0].time : 'day'}
+          onChange={handleChange}
+          variant='standard'
+          centered='true'>
+          <Tab label="Day" value='day' style={{ color: theme.color }} />
+          <Tab label="Hour" value='hour' style={{ color: theme.color }} />
+          <Tab label="Minute" value='minute' style={{ color: theme.color }} />
+        </Tabs>
+      </AppBar>
       <div className='row p-3 m-3'>
         {loadingch ? (
           <center>
+
             <h1 className='mt-5'>Loading...</h1>
             <WhisperSpinner
               size='500'
@@ -70,14 +86,24 @@ const BaseCharts = ({
           </center>
         ) : !chartData ? (
           <p>ERROR</p>
-        ) : (
+        ) :
+
+            (
+
+
               chartData.map((data, index) => (
                 <Card
-                  className='col-3 p-1 m-5 bg-dark text-white'
+                  className='col-lg-3 col-sm-9 p-1 m-5 bg-dark text-white'
                   key={data.time + index}>
-                  <p>{data.time}</p>
+
+
+
+
+
                   <p>{data.symbol}</p>
-                  <Line2 data={data.finaldata} />
+                  <Line2 data={data.finaldata}
+                    chartime={data.time}
+                  />
                 </Card>
               ))
             )}

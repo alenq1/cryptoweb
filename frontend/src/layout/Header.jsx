@@ -66,7 +66,7 @@ const Header = props => {
   console.log(props, 'PROS DE HEADERS')
   return (
     <>
-      <Navbar collapseOnSelect expand="lg" className='sticky-top' style={theme}>
+      <Navbar collapseOnSelect expand="lg" className='sticky-top shadow-lg' style={theme}>
 
         <IconButton
           edge='start'

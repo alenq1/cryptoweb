@@ -10,7 +10,7 @@ import ModalCrypto from '../components/ModalCrypto';
 import { WhisperSpinner } from "react-spinners-kit";
 
 
-const Home = (props, { apiData }) => {
+const Home = (props) => {
 
   console.log(props, "PRPOS EN HOME PARA CUASROS")
 
@@ -40,7 +40,7 @@ const Home = (props, { apiData }) => {
     //setInterval( () => {fetchData('https://min-api.cryptocompare.com/data/top/totalvolfull?limit=100&tsym=USD')}, 10000)      
 
     //props.getApiData()
-    props.ConnectWS('ws://192.168.0.2/ws/test')
+    //props.ConnectWS('ws://192.168.0.3/ws/test')
 
 
     //      console.log(apiData, "APIDATA VACIAAAAAA??????????")
@@ -54,7 +54,7 @@ const Home = (props, { apiData }) => {
     <div>
       {props.status === 'connecting' || props.status === 'connected' ?
         <center>
-          <h1 className='mt-5'>Loading...</h1>
+          <h1 className='mt-5 p-5'>Loading...</h1>
           <WhisperSpinner
             size='500'
             color="#686769"

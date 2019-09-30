@@ -18,7 +18,7 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
 
-def get_page(url):
+def get_page(url, scrap=True):
 
     #global response
     response = []
@@ -27,7 +27,9 @@ def get_page(url):
         headers = {
             'user-agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:59.0) Gecko/20120101 Firefox/59.0'
         }
+        print(url, "REQUEST APIKEY")
         page = requests.get(url, headers=headers, timeout=1)
+
         if page.status_code != 200:
             response = [{'error_code': page.status_code}]
 
@@ -36,9 +38,15 @@ def get_page(url):
         response = [{'error': str(e)}]
         return response
     #print(page, 'PAGINA CONSULTADA')
-    soup = BeautifulSoup(page.text, 'html.parser')
-    soup.prettify()
-    return soup
+    if scrap:
+        print("SSSSSSSSIIIIIIIIII SCRAPEAAAAAA")
+        soup = BeautifulSoup(page.text, 'html.parser')
+        soup.prettify()
+        return soup
+    else:
+        print("SOOOOOLLLLLOOO REQQQQUESST")
+        return page.json()
+    
 
 
 def scrap_news_sites(to_scrap):
@@ -119,7 +127,7 @@ def add(a, b):
 def get_api_data():
     
     sites_to_get_data = [{'page': 'cryptoData', 'url':'https://min-api.cryptocompare.com/data/top/totalvolfull?limit=100&tsym=USD'},
-                        {'page': 'exchangeData', 'url':'https://api.coinpaprika.com/v1/exchanges'},
+                        {'page': 'exchangeData', 'url':'https://min-api.cryptocompare.com/data/exchanges/general'},
                         {'page': 'explorerInfo', 'url':'http://chainz.cryptoid.info/explorer/api.dws?q=summary'},
                         ]
     

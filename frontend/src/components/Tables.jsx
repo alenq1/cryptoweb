@@ -20,85 +20,87 @@ const Tables = (props, { color, txtColor, apiDatas, apiData }) => {
   //console.log(props.apiDatas, "APIDATAA DE SELECTORRRRRRRRRRRR")
   //props.data.sort((a, b) => b.c - a.c)
 
-  const lol = symbol => {
+  const showDetail = symbol => {
     console.log('LOL APRETADO con', symbol);
     //props.getChartData(symbol, 10);
-    props.detailCrypto([symbol]);
+    props.detailCrypto([symbol.name]);
   };
   //props.apiData ? props.apiData.sort((a, b) => b.RAW.USD.MKTCAP - a.RAW.USD.MKTCAP) : null
   console.log(props.apiDatas, 'PARA PINTAr EN tABLAS');
 
   return (
     <React.Fragment>
-      <Table responsive
-        borderless
-        hover
-        striped
-        className='m-4 p-4'
-        variant='dark'>
-        <thead
-          style={{ background: '#004e92', color: 'whitesmoke' }}>
-          <tr style={{ padding: '2em', textAlign: 'center' }}>
-            <th style={{ ...stythtd }}>Rank</th>
-            <th style={{ ...stythtd, textAlign: 'left' }}>Name</th>
-            <th style={stythtd} onClick={() => props.setSort('price')}>
-              Last Price
+      <div className="col-lg-11 col-sm-11">
+        <Table responsive
+          borderless
+          hover
+          striped
+          className='m-auto p-lg-4 m-sm-auto p-4'
+          variant='dark'>
+          <thead
+            style={{ background: 'linear-gradient(to right, #23074d, #cc5333', color: txtColor, }}>
+            <tr style={{ textAlign: 'center' }}>
+              <th style={{ ...stythtd }}>Rank</th>
+              <th style={{ ...stythtd, textAlign: 'left' }}>Name</th>
+              <th style={stythtd} onClick={() => props.setSort('price')}>
+                Last Price
             </th>
-            <th style={stythtd} onClick={() => props.setSort('pctChange')}>
-              Percent change
+              <th style={stythtd} onClick={() => props.setSort('pctChange')}>
+                % Change
             </th>
-            <th style={stythtd} onClick={() => props.setSort('marketCap')}>
-              Market Cap
+              <th style={stythtd} onClick={() => props.setSort('marketCap')}>
+                Market Cap
             </th>
-            <th style={stythtd}>Circulating Supply</th>
-            <th style={stythtd}>24h Volume</th>
-          </tr>
-        </thead>
-        <tbody
-          style={{
-            color: props.txtColor === 'whitesmoke' ? 'whitesmoke' : 'black',
-            textAlign: 'left',
-            backgroundColor: props.color === 'black' ? '#232526' : 'whitesmoke'
-          }}>
-          {!props.apiDatas[0].CoinInfo
-            ? 0
-            : props.apiDatas.map((coin, index) => (
-              <tr
-                style={{ padding: '2em' }}
-                key={index}
-                onClick={() => lol(coin.CoinInfo.Name)}>
-                <td style={{ ...stythtd, overflowY: 'auto' }}>{index + 1} </td>
-                <td style={{ ...stythtd, textAlign: 'left', overflowY: 'auto' }}>
-                  <img
-                    src={`https://www.cryptocompare.com/${coin.CoinInfo.ImageUrl}`}
-                    height='20px'
-                    width='20px'
-                    className='mr-3'
-                  />
-                  {coin.CoinInfo.FullName} {coin.CoinInfo.Name}
-                </td>
-                <td style={stythtd}>{coin.DISPLAY.USD.PRICE}</td>
-                <td
-                  style={
-                    coin.RAW.USD.CHANGEPCT24HOUR > 0
-                      ? { ...stythtd, color: '#39FF33' }
-                      : { ...stythtd, color: 'red' }
-                  }>
-                  {coin.DISPLAY.USD.CHANGEPCT24HOUR} %
+              <th style={stythtd}>Circulating Supply</th>
+              <th style={stythtd}>24h Volume</th>
+            </tr>
+          </thead>
+          <tbody
+            style={{
+              color: props.txtColor === 'whitesmoke' ? 'whitesmoke' : 'black',
+              textAlign: 'left',
+              backgroundColor: props.color === 'black' ? '#232526' : 'whitesmoke'
+            }}>
+            {!props.apiDatas[0].CoinInfo
+              ? 0
+              : props.apiDatas.map((coin, index) => (
+                <tr
+                  style={{ padding: '2em' }}
+                  key={index}
+                  onClick={() => showDetail(coin)}>
+                  <td style={{ ...stythtd, overflowY: 'auto' }}>{index + 1} </td>
+                  <td style={{ ...stythtd, textAlign: 'left', overflowY: 'auto' }}>
+                    <img
+                      src={`https://www.cryptocompare.com/${coin.CoinInfo.ImageUrl}`}
+                      height='20px'
+                      width='20px'
+                      className='mr-3'
+                    />
+                    {coin.CoinInfo.FullName} {coin.CoinInfo.Name}
                   </td>
-                <td style={{ ...stythtd, textAlign: 'left' }}>
-                  {coin.DISPLAY.USD.MKTCAP}{' '}
-                </td>
-                <td style={{ ...stythtd, textAlign: 'left' }}>
-                  {coin.DISPLAY.USD.SUPPLY}
-                </td>
-                <td style={{ ...stythtd, textAlign: 'left' }}>
-                  {coin.DISPLAY.USD.VOLUME24HOUR}
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </Table>
+                  <td style={stythtd}>{coin.DISPLAY.USD.PRICE}</td>
+                  <td
+                    style={
+                      coin.RAW.USD.CHANGEPCT24HOUR > 0
+                        ? { ...stythtd, color: '#39FF33' }
+                        : { ...stythtd, color: 'red' }
+                    }>
+                    {coin.DISPLAY.USD.CHANGEPCT24HOUR} %
+                  </td>
+                  <td style={{ ...stythtd, textAlign: 'left' }}>
+                    {coin.DISPLAY.USD.MKTCAP}{' '}
+                  </td>
+                  <td style={{ ...stythtd, textAlign: 'left' }}>
+                    {coin.DISPLAY.USD.SUPPLY}
+                  </td>
+                  <td style={{ ...stythtd, textAlign: 'left' }}>
+                    {coin.DISPLAY.USD.VOLUME24HOUR}
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </Table>
+      </div>
     </React.Fragment >
   );
 };

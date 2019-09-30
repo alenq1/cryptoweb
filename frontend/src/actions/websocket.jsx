@@ -37,6 +37,7 @@ export const ConnectWS = (wsUrl) => dispatch => {
         })
 
         localStorage.setItem('apiData', JSON.stringify(JSON.parse(event.data).message.cryptoData.Data))
+        localStorage.setItem('othData', JSON.stringify(JSON.parse(event.data).message))
         //       showData(JSON.parse(event.data))
     }
     wsconn.onerror = function (event) {

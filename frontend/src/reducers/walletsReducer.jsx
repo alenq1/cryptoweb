@@ -5,7 +5,7 @@ import {
 } from '../constants/action-types'
 
 const initialState = {
-  walletsData: [],
+  walletsData: '',
   loading: false,
   error: ''
 }

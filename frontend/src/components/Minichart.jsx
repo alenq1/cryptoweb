@@ -101,7 +101,7 @@ const Minichart = (props) => {
           </Select>
         </FormControl> {props.sortDirection === "desc" ? "Winners" : "Losers"}
       </h2>
-      <div className="row" style={style}>
+      <div className="row align-content-center col-lg-11 col-sm-11" style={style}>
         {par1 === null
           ? 0
           :
