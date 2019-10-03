@@ -4,6 +4,7 @@ import {
   ERROR_GET_CHART
 } from '../constants/action-types';
 
+
 const initialState = {
   chartData: localStorage.getItem('chartdata')
     ? JSON.parse(localStorage.getItem('chartdata'))

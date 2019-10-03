@@ -20,14 +20,15 @@ from asgiref.sync import async_to_sync
 
 def get_page(url, scrap=True):
 
-    #global response
+
     response = []
 
     try:
         headers = {
             'user-agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:59.0) Gecko/20120101 Firefox/59.0'
         }
-        print(url, "REQUEST APIKEY")
+        #print(url, "REQUEST APIKEY")
+        
         page = requests.get(url, headers=headers, timeout=1)
 
         if page.status_code != 200:
@@ -37,9 +38,11 @@ def get_page(url, scrap=True):
     except (ex.RequestException, ex.Timeout, ex.ConnectionError, ex.ConnectTimeout, ex.InvalidURL) as e:
         response = [{'error': str(e)}]
         return response
+    
     #print(page, 'PAGINA CONSULTADA')
+    
     if scrap:
-        print("SSSSSSSSIIIIIIIIII SCRAPEAAAAAA")
+        #print("SSSSSSSSIIIIIIIIII SCRAPEAAAAAA")
         soup = BeautifulSoup(page.text, 'html.parser')
         soup.prettify()
         return soup
@@ -58,20 +61,7 @@ def scrap_news_sites(to_scrap):
         ###FOR NEWS SOURCE
         selection = to_scrap.find_all('tr', {'class': 'photography-wrapper'})
 
-        # selection = to_scrap.find('div', {'id': 'fsb'})
-        # # GET TITLES SECTION
-        # title = selection.find_all('h3')
-        # # CREATE TEMP LIST FOR GET TAGS ID
-        # tmplist = []
-
-        # for lista in title:
-        #     tmplist.append(lista.get("id")[1:])
-
-        #     # LOOP FOR GET EACH TITLE SITE
-        # for lista in title:
-        #     response.append({'site': lista.getText(), 'link': '',
-        #                     'content': '', 'image': ''})
-
+       
         for line in selection:
             response.append({
             'site': line.find('h3').getText(), 
@@ -82,26 +72,16 @@ def scrap_news_sites(to_scrap):
             'mentions': line.find('p', {'class': 'blog-counting mention'}).getText()
             })
 
-
-            # LOOP FOR GET EACH IMAGE LINK SITE
-        # for index, lista in enumerate(tmplist):
-        #     response[index]['image'] = (
-        #         ((selection.find('p', {'data': lista})).find('img')).get('data-lazy-src'))
-
-        # for index, lista in enumerate(tmplist):
-        #     response[index]['link'] = (
-        #         ((selection.find('p', {'data': lista})).find('a')).get('href'))
-
     except AttributeError as e:
         response = [{'error': str(e)}]
         return response
-    print(response, 'RESPUESTA PARA M<ANDAR')
+    #print(response, 'RESPUESTA PARA M<ANDAR')
     return response
 
 
 def get_site_content(to_scrap, keyword):
 
-    #selection = to_scrap.find('a')
+    
     try:
         
         selection = to_scrap.find_all('a', href=re.compile(keyword))[1:6]
@@ -132,8 +112,9 @@ def get_api_data():
                         ]
     
     #SET FUCNTIONS FOR EXECUTING CONCURRENT REQUESTS
+    
     def get_site(url):
-        print("CONECTANDO A SITIO", url)
+        #print("CONECTANDO A SITIO", url)
         return requests.get(url, timeout=5)
     
     def get_all_sites(urls):
@@ -143,13 +124,13 @@ def get_api_data():
     only_sites = [urls['url'] for urls in sites_to_get_data ]
     data_to_client = [responses.json() for responses in get_all_sites(only_sites)]
 
-    print(data_to_client[0]['Data'][0]['CoinInfo'], "ME EJECUTARON COMO TAREA PERIRODICA")
+    #print(data_to_client[0]['Data'][0]['CoinInfo'], "ME EJECUTARON COMO TAREA PERIRODICA")
     
     # CALLING WEBSOCKET GROUP TO SEND REQUESTS RESULTS
 
     channel_layer = get_channel_layer()
     logger = logging.getLogger()
-    print("ESTES ESSSSS CHANNEL LAYYYYYYER", channel_layer)
+    #print("ESTES ESSSSS CHANNEL LAYYYYYYER", channel_layer)
 
     return async_to_sync(channel_layer.group_send)('crypto', {
         'type': 'send.broadcast' ,
@@ -160,7 +141,9 @@ def get_api_data():
 
 
 def get_google_search(to_scrap):
-    print('ME LLA MANARON', to_scrap)
+    
+    #print('ME LLAMARON', to_scrap)
+    
     response1 = []
     try:
         for items in to_scrap.find_all('div', {'class': 'rc'}):
@@ -170,14 +153,14 @@ def get_google_search(to_scrap):
 
     except (AttributeError, KeyError) as ex:
         return [{'error': str(ex)}]
-    #content = soup.find_all(class_='trow trow-wrap')
-    # content = selection.find_all('p', {data: })
-
+    
 
 def get_wallet_info(to_scrap):
     response = []
-    task = add.delay(5, 4)
-    print('NO DE TASK', task)
+    
+    #task = add.delay(5, 4)
+    #print('NO DE TASK', task)
+    
     try:
         selection = to_scrap.find_all(
             'a', {'data-category': 'Cryptocurrency Wallets'})
@@ -190,9 +173,6 @@ def get_wallet_info(to_scrap):
         return [{'error': str(ex)}]
 
 
-    # for i in range(len(response)):
-    #     for k, v in response[i]['categories'].items():
-    #         tmplist.append(k)
 
 if __name__ == "__main__":
     pass

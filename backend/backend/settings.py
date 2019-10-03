@@ -22,13 +22,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = 'rem#fzp89q)49-%3m3dsuec!+2z-92a)j8flp)rivihp#rxtu%'
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = (os.environ.get('SECRET_KEY'), 'abcd')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 #DEBUG = True
 DEBUG = int(os.environ.get('DEBUG', default=0))
 
-ALLOWED_HOSTS = ['proxy', 'localhost', 'app', '172.19.0.4', 'frontend', 'channels', 'websocket']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -52,6 +52,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    #HEROKU MIDDLEWARE
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -65,7 +66,8 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        
+        'DIRS': [os.path.join(BASE_DIR, '../frontend/build')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -119,7 +121,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
-LANGUAGE_CODE = os.environ.get('LANG', 'en-US')
+LANGUAGE_CODE = os.environ.get('APPLANG', 'en-US')
 
 TIME_ZONE = 'UTC'
 
@@ -133,19 +135,38 @@ USE_TZ = True
 # CORS SETTINGS
 CORS_ORIGIN_ALLOW_ALL = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-STATIC_URL = '/staticlocal/'
 
-# as declared in NginX conf, it must match
+
+#### FOR DOCKER DEPLOY SETTINGS
+
+
+STATIC_URL = '/staticlocal/'
+###### as declared in NginX conf, it must match
 STATIC_ROOT = os.path.join(os.path.dirname(
     os.path.dirname(BASE_DIR)), 'backend/static')
-
-# do the same for media files, it must match
+##### do the same for media files, it must match
 MEDIA_ROOT = os.path.join(os.path.dirname(
     os.path.dirname(BASE_DIR)), 'backend/media')
+
+
+####### FOR HEROKU DEPLOY SETTINGS
+if os.environ['HEROKU_DEPLOY'] == 'Y':
+    print('HEROKU DEPLOY ACTIVATED')
+    MIDDLEWARE.insert(2, 'whitenoise.middleware.WhiteNoiseMiddleware')
+    STATIC_URL = '/static/'
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, '../frontend/build/static'),
+        ]
+    #STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+MEDIA_URL = '/media/'
+
+######END HEROKU CONFIGS
 
 
 # CELERY SETTINGS
@@ -161,12 +182,12 @@ CELERY_TASK_SERIALIZER = 'json'
 
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",  # redis como backend
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            # busca a redis en la direccion
+            
             "hosts": [os.environ.get('REDIS_URL', 'redis://redis:6379')],
 
         },
-        # "ROUTING": "scrap.routing.channel_routing",  # buscar el routing
+        
     },
 }

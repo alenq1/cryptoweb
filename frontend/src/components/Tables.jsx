@@ -1,7 +1,7 @@
 import React from 'react';
 import { Linecharts, Line2, Line3, Line4, Line5, Line6 } from './Cryptocharts';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { UrlApiImage } from '../services/apisources';
 import { getApiData, getChartData } from '../actions/apiData';
 import { setSort } from '../actions/sort';
 import { sortData } from '../selectors/sortData';
@@ -12,21 +12,18 @@ const stythtd = {
   borderColor: 'black'
 };
 
-const Tables = (props, { color, txtColor, apiDatas, apiData }) => {
+const Tables = (props, { color, textColor, apiDatas, apiData }) => {
 
-  //console.log(props.coindata.data, "COINDATA")
-  //console.log(props, "TODAS PROPS EN TABLLLLLAAAAAAA")
-  //console.log(props.apiData, "PROPS EN TABALAS")
   //console.log(props.apiDatas, "APIDATAA DE SELECTORRRRRRRRRRRR")
-  //props.data.sort((a, b) => b.c - a.c)
+
 
   const showDetail = symbol => {
-    console.log('LOL APRETADO con', symbol);
+
+    //console.log('LOL APRETADO con', symbol);
     //props.getChartData(symbol, 10);
-    props.detailCrypto([symbol.name]);
+
+    props.detailCrypto(symbol);
   };
-  //props.apiData ? props.apiData.sort((a, b) => b.RAW.USD.MKTCAP - a.RAW.USD.MKTCAP) : null
-  console.log(props.apiDatas, 'PARA PINTAr EN tABLAS');
 
   return (
     <React.Fragment>
@@ -36,9 +33,9 @@ const Tables = (props, { color, txtColor, apiDatas, apiData }) => {
           hover
           striped
           className='m-auto p-lg-4 m-sm-auto p-4'
-          variant='dark'>
+        >
           <thead
-            style={{ background: 'linear-gradient(to right, #23074d, #cc5333', color: txtColor, }}>
+            style={{ background: 'linear-gradient(to right, #000428, #004e92)', color: 'white' }}>
             <tr style={{ textAlign: 'center' }}>
               <th style={{ ...stythtd }}>Rank</th>
               <th style={{ ...stythtd, textAlign: 'left' }}>Name</th>
@@ -57,7 +54,7 @@ const Tables = (props, { color, txtColor, apiDatas, apiData }) => {
           </thead>
           <tbody
             style={{
-              color: props.txtColor === 'whitesmoke' ? 'whitesmoke' : 'black',
+              color: props.textColor,
               textAlign: 'left',
               backgroundColor: props.color === 'black' ? '#232526' : 'whitesmoke'
             }}>
@@ -71,7 +68,7 @@ const Tables = (props, { color, txtColor, apiDatas, apiData }) => {
                   <td style={{ ...stythtd, overflowY: 'auto' }}>{index + 1} </td>
                   <td style={{ ...stythtd, textAlign: 'left', overflowY: 'auto' }}>
                     <img
-                      src={`https://www.cryptocompare.com/${coin.CoinInfo.ImageUrl}`}
+                      src={`${UrlApiImage}${coin.CoinInfo.ImageUrl}`}
                       height='20px'
                       width='20px'
                       className='mr-3'
@@ -80,11 +77,8 @@ const Tables = (props, { color, txtColor, apiDatas, apiData }) => {
                   </td>
                   <td style={stythtd}>{coin.DISPLAY.USD.PRICE}</td>
                   <td
-                    style={
-                      coin.RAW.USD.CHANGEPCT24HOUR > 0
-                        ? { ...stythtd, color: '#39FF33' }
-                        : { ...stythtd, color: 'red' }
-                    }>
+                    style={coin.RAW.USD.CHANGEPCT24HOUR > 0 ? { color: "#1DAC22" } : { color: "red" }}
+                  >
                     {coin.DISPLAY.USD.CHANGEPCT24HOUR} %
                   </td>
                   <td style={{ ...stythtd, textAlign: 'left' }}>
@@ -109,15 +103,15 @@ const mapStateToProps = state => {
   return {
     apiDatas: sortData(state),
     color: state.theme.theme.color,
-    txtColor: state.theme.theme.textColor
-  };
-};
+    textColor: state.theme.theme.textColor
+  }
+}
 
 const mapDispatchToProps = dispatch => ({
   setSort: sortkey => dispatch(setSort(sortkey)),
-  //clearSortParams: bindActionCreators(actions.clearSortParams, dispatch),
-  getChartData: (symbol, limit) => dispatch(getChartData(symbol, limit))
-});
+  getChartData: (symbol, limit) => dispatch(getChartData(symbol, limit)),
+
+})
 
 export default connect(
   mapStateToProps,

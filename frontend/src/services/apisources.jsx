@@ -1,10 +1,28 @@
 
-//export const conn = new WebSocket("wss://stream.binance.com:9443/ws/!ticker@arr");
-    
-    //const conn = new WebSocket("wss://testnet-dex.binance.org/api/ws");
-   
 
-//export const customconn = new WebSocket(`wss://stream.binance.com:9443/stream?streams=btcusdt@kline_4h`) 
+export const WServer = 'ws://192.168.1.4/ws/test'
+export const UrlApiImage = 'https://www.cryptocompare.com/'
+export const UrlApiCoin = 'https://min-api.cryptocompare.com/data/top/totalvolfull?limit=100&tsym=USD'
+export const ApiNews = 'api/news/'
+export const ApiWallets = 'api/wallets/'
+export const ApiExplorer = 'http://chainz.cryptoid.info/explorer/api.dws?q=summary/'
+export const Themes = {
+
+        light: {
+                color: 'whitesmoke',
+                textColor: 'black',
+                image: require("../layout/imgs/crypto8.png"),
+
+
+        },
+
+        dark: {
+                color: 'black',
+                textColor: 'white',
+                image: require("../layout/imgs/crypto7.jpg"),
+        }
+
+}
 
 export const apiKeys = {
 
@@ -15,11 +33,11 @@ export const apiKeys = {
 
 export const sources = [
         {
-         getAction: 'crypto table data',
-         url: 'https://min-api.cryptocompare.com/data/top/totalvolfull?limit=100&tsym=USD',
-         method: 'GET',
-         data: '',
-         headers: ''
+                getAction: 'crypto table data',
+                url: 'https://min-api.cryptocompare.com/data/top/totalvolfull?limit=100&tsym=USD',
+                method: 'GET',
+                data: '',
+                headers: ''
         }
 
 ]

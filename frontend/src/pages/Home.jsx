@@ -3,7 +3,6 @@ import { conn } from '../services/apisources'
 import { connect } from 'react-redux'
 import { getApiData, setSort, getChartData } from '../actions/apiData'
 import { ConnectWS } from '../actions/websocket'
-import { rawData, sortData } from '../selectors/sortData';
 import Tables from '../components/Tables'
 import Minichart from '../components/Minichart'
 import ModalCrypto from '../components/ModalCrypto';
@@ -12,42 +11,19 @@ import { WhisperSpinner } from "react-spinners-kit";
 
 const Home = (props) => {
 
-  console.log(props, "PRPOS EN HOME PARA CUASROS")
+  //console.log(props, "PRPOS EN HOME PARA CUASROS")
 
   //const initialData = JSON.parse(localStorage.getItem('apiData'))
 
 
   const [modal, showModal] = useState(false)
   const [crypto, showCrypto] = useState('')
-  //const [apiData, setApidata] = useState(initialData)
 
   const detailCrypto = (cryptopar) => {
+    console.log(cryptopar, "PARA PASAR A MODAL");
     showModal(!modal)
     showCrypto(cryptopar)
   }
-
-  const handleHide = () => {
-
-    showModal(!modal)
-  }
-
-
-  //let top = data.filter( symbols => (symbols.s === 'BTCUSDT' || symbols.s === 'ET'))
-
-  useEffect(() => {
-
-
-    //setInterval( () => {fetchData('https://min-api.cryptocompare.com/data/top/totalvolfull?limit=100&tsym=USD')}, 10000)      
-
-    //props.getApiData()
-    //props.ConnectWS('ws://192.168.0.3/ws/test')
-
-
-    //      console.log(apiData, "APIDATA VACIAAAAAA??????????")
-  },
-
-    [])
-
 
   return (
 
@@ -75,9 +51,7 @@ const Home = (props) => {
           <ModalCrypto
             modal={modal}
             showModal={showModal}
-            symbol={crypto.symbol}
-            lastPrice={crypto.lastPrice}
-
+            info={crypto}
           />
 
         </center>

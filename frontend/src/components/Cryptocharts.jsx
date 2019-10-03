@@ -29,7 +29,7 @@ const Linecharts = props => {
 
   let option = {
     title: {
-      text: 'cyptotest'
+      text: 'Chart Example'
     },
     textStyle: {
       color: '#ffffff'
@@ -105,9 +105,10 @@ const Linecharts = props => {
 export default Linecharts;
 
 const RawLine2 = props => {
-  console.log(props, 'PROPS DE LINE2');
-  console.log(props.data, 'DATA PARA CREAR TIEMP0 Y CLOSE');
-  console.log(typeof (props.data), "TIPO DE PROPS DATA");
+
+  //console.log(props, 'PROPS DE LINE2');
+  //console.log(props.data, 'DATA PARA CREAR TIEMP0 Y CLOSE');
+  //console.log(typeof (props.data), "TIPO DE PROPS DATA");
 
   let chartDate = [];
   let chartData = [];
@@ -121,7 +122,7 @@ const RawLine2 = props => {
   }
 
 
-  console.log(props.chartime, 'PARA DIVIDIR GRAPHIC')
+  //console.log(props.chartime, 'PARA DIVIDIR GRAPHIC')
 
   const option = {
     textStyle: {
@@ -164,27 +165,6 @@ const RawLine2 = props => {
     ]
   };
 
-  // setInterval(function () {
-
-  //         //console.log(option.xAxis.data, "tiempo")
-  //         //console.log(option.series[0].data, "Valor")
-  //         if(option.xAxis.data.length > 10){
-  //         option.xAxis.data.shift()
-  //     }
-  //         option.xAxis.data.push(moment(props.time[0]).format('LTS'));
-  //         //option.xAxis.data.shift();
-  //         //option.xAxis.data.push(moment(props.time[0]).format('LTS'));
-  //         if(option.series[0].data > 10){
-  //         option.series[0].data.shift()
-  //     }
-  //         option.series[0].data.push(parseInt(props.values[0]));
-
-  //     // myChart.setOption({
-  //     //     series: [{
-  //     //         data: data
-  //     //     }]
-  //     // });
-  // }, 1000);
 
   return (
     <center>
@@ -193,11 +173,12 @@ const RawLine2 = props => {
         notMerge={true}
         lazyUpdate={true}
         theme={'theme_name'}
-        style={{ height: '300px', width: '250px' }}
+        style={{ height: '250px', width: '300px' }}
       />
     </center>
-  );
-};
+  )
+}
+
 const mapStateToProps = state => {
   return {
     color: state.theme.theme.color,

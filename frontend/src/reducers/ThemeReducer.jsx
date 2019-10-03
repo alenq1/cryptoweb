@@ -1,12 +1,9 @@
 import { THEME_CHANGE } from '../constants/action-types'
+import { Themes } from '../services/apisources'
 
 const initialState = {
 
-  theme: {
-    color: 'whitesmoke',
-    textColor: 'black',
-
-  }
+  theme: Themes['light']
 }
 const themeReducer = (state = initialState, action) => {
 
@@ -17,11 +14,7 @@ const themeReducer = (state = initialState, action) => {
 
       return {
         ...state,
-        theme: {
-          ...state.theme,
-          color: action.payload,
-          textColor: state.theme.color
-        }
+        theme: Themes[action.payload]
       };
     default:
 

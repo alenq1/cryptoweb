@@ -14,15 +14,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
-import { customconn } from '../services/apisources'
-
-//import {Linecharts, Line2, Line3, Line4, Line5, Line6} from './Cryptocharts'
-import {
-  CardHeader, CardMedia, CardContent, CardActions, Collapse, Avatar,
-  IconButton, Typography
-} from '@material-ui/core/';
-import { red } from '@material-ui/core/colors';
-
+import { UrlApiImage } from '../services/apisources'
 
 const style = {
 
@@ -32,13 +24,6 @@ const style = {
   // #explode li:hover .pic { opacity:0; transform: scale(1.4); }
 
 }
-
-
-let ticker = 'btcsdt'
-let time = '4h'
-
-//console.log("MMINICHAR LLAMADO")
-
 
 
 const Minichart = (props) => {
@@ -67,49 +52,48 @@ const Minichart = (props) => {
   //console.log(par1, "SOY PAR1")
 
 
-  //let par2 = 'USDT'
-  //let filters = par1.map( kline => kline+par2)
-  ////console.log(filters, "RESULT DE FILTRADO")
-  //let logos = par1.map( kline => `import ${kline.toLowerCase()} from 'cryptocurrency-icons/svg/color/${kline.toLowerCase()}.svg'`)
-  ////console.log(logos, "LOGOS")
-
-  // let topper = props.data.filter( filtered => 
-  //     filtered.symbol === filters[0] ||
-  //     filtered.symbol === filters[1] ||
-  //     filtered.symbol === filters[2] ||
-  //     filtered.symbol === filters[3] ||
-  //     filtered.symbol === filters[4] 
-
-
-  //)
-  //console.log(par1, "FILTRADO")
-
   return (
     <div>
-      <h2 className="m-5">Top 5 Crypto
+      <h2 className="m-5 shadow-lg w-25 rounded-top"
+        style={{
+          background: props.theme.color === 'black' ? 'linear-gradient(to bottom, #232526, #414345)'
+            : 'linear-gradient(to bottom, #ada996, #f2f2f2, #dbdbdb, #eaeaea)',
+          color: props.theme.textColor
+        }}
+      >Top 5 Crypto
       <FormControl >
-          <InputLabel htmlFor="age-simple"></InputLabel>
+
           <Select
             value={props.sortKey}
             onChange={(e) => props.setSort(e.target.value)}
-            input={<OutlinedInput labelWidth='100' name="age" />}
-
+            input={<OutlinedInput
+              className="ml-2 mr-2"
+              fullWidth
+              margin='dense'
+              name="age-simple" />}
           >
             <MenuItem value={'price'}>Price</MenuItem>
             <MenuItem value={'pctChange'}>% Change</MenuItem>
             <MenuItem value={'marketCap'}>Market Cap</MenuItem>
           </Select>
-        </FormControl> {props.sortDirection === "desc" ? "Winners" : "Losers"}
+        </FormControl> {props.sortDirection === "desc" ? " Winners" : " Losers"}
       </h2>
       <div className="row align-content-center col-lg-11 col-sm-11" style={style}>
         {par1 === null
           ? 0
           :
           par1.map((ticker, index) =>
-            <Card className="bg-dark text-white m-5 m-sm-3 col-lg-2 col-sm-8" key={index}>
+            <Card className='m-5 m-sm-3 col-lg-2 col-sm-8'
+              style=
+              {{
+                background: props.theme.color === 'black' ? 'linear-gradient(to bottom, #232526, #414345)'
+                  : 'linear-gradient(to bottom, #ada996, #f2f2f2, #dbdbdb, #eaeaea)',
+                color: props.theme.textColor
+              }}
+              key={index}>
               <Card.Header>
                 <div>
-                  <img src={`https://www.cryptocompare.com/${ticker.CoinInfo.ImageUrl}`} height="20px" width="20px" className="mr-3" />
+                  <img src={`${UrlApiImage}${ticker.CoinInfo.ImageUrl}`} height="20px" width="20px" className="mr-3" />
 
                   <span className="ml-4">{ticker.CoinInfo.Name}</span>
                 </div>
@@ -117,11 +101,7 @@ const Minichart = (props) => {
               <Card.Body className="text-align-left">
                 {!par1 ? 0 :
                   <>
-                    {/* <Line6
-                time={ticker.openTime}
-                values={ticker.history}
-                data={props.klinedata}
-                /> */}
+
                     <h4>
                       <Transition
                         items={ticker.DISPLAY.USD.PRICE}
@@ -132,7 +112,7 @@ const Minichart = (props) => {
                         {item => props => <div style={props}>{ticker.DISPLAY.USD.PRICE}</div>}
                       </Transition>
                     </h4>
-                    <h5 style={ticker.RAW.USD.CHANGEPCT24HOUR > 0 ? { color: "#39FF33" } : { color: "red" }}
+                    <h5 style={ticker.RAW.USD.CHANGEPCT24HOUR > 0 ? { color: "#1DAC22" } : { color: "red" }}
                     >
                       {ticker.DISPLAY.USD.CHANGEPCT24HOUR}%</h5>
                   </>
@@ -151,7 +131,8 @@ const mapStateToProps = state => {
   return {
     apiData: sortData(state),
     sortKey: state.apiData.sortKey,
-    sortDirection: state.apiData.sortDirection
+    sortDirection: state.apiData.sortDirection,
+    theme: state.theme.theme
   };
 
 };
@@ -163,4 +144,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Minichart)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps)
+  (Minichart)

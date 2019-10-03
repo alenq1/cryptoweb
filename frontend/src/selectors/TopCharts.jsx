@@ -2,31 +2,29 @@ import { createSelector } from 'reselect'
 import { orderBy } from 'lodash'
 import { getChartData } from '../actions/apiData'
 
-
-const rawData = state => state.apiData && state.apiData.apiData
-const getKey = state => state.apiData && state.apiData.sortKey
-const getDirection = state => state.apiData && state.apiData.sortDirection
+const rawData = state => state.WSocket && state.WSocket.wsData
+//const rawData = state => state.apiData && state.apiData.apiData
+//const getKey = state => state.apiData && state.apiData.sortKey
+//const getDirection = state => state.apiData && state.apiData.sortDirection
 
 
 export const TopCharts = createSelector(
 
 
-    [rawData, getKey, getDirection],
+    [rawData],
 
-    (data, sortKey, direction) => {
+    (data) => {
 
-        console.log(data, "RAWDAT")
-        console.log(sortKey, "GETKEY")
-        console.log(direction, "GET DIRECTIRO")
+        console.log(data, "RAWDATA PARA CHARTTTTTTT")
 
 
         const numberTop = (numTop) => {
 
-            if (data.length > 1) {
+            if (data[0].cryptoData.length > 1) {
                 let Coinlist = []
                 for (let topCrypto = 0; topCrypto <= numTop; topCrypto++) {
-                    console.log(data[topCrypto].CoinInfo.Name, "SYMBOLO PARA BUSCAR DATA")
-                    Coinlist.push(data[topCrypto].CoinInfo.Name)
+                    console.log(data[0].cryptoData[topCrypto].CoinInfo.Name, "SYMBOLO PARA BUSCAR DATA")
+                    Coinlist.push(data[0].cryptoData[topCrypto].CoinInfo.Name)
 
                 }
                 return Coinlist

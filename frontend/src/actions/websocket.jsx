@@ -8,24 +8,24 @@ import {
 export const ConnectWS = (wsUrl) => dispatch => {
 
     console.log(wsUrl, 'PREPARO COENXION A WS');
+
     dispatch({ type: WEBSOCKET_CONNECTING })
 
-    //let testWSURL = "ws://localhost/ws/test"
     let wsconn = new WebSocket(wsUrl)
 
     wsconn.onopen = function (event) {
 
 
-        console.log("CONECTADO WSSSSSSS");
+        //console.log("CONECTADO WSSSSSSS");
         wsconn.send(JSON.stringify({ message: 'CONNECTED FROM FRONTEND' }));
         dispatch({ type: WEBSOCKET_CONNECTED, payload: event.data })
         //   // send Subscribe/Unsubscribe messages here (see below)
-        //// //wsconn.send(JSON.stringify({ method: "subscribe", topic: "allTickers", symbols: ["$all"] }));
+
 
 
     }
     wsconn.onmessage = function (event) {
-        //       //console.info('received data', JSON.parse(event.data));
+
         console.log("MENSAGE RECIBIDO WSSSSSSS");
         dispatch({
             type: WEBSOCKET_MESSAGE,
@@ -38,18 +38,19 @@ export const ConnectWS = (wsUrl) => dispatch => {
 
         localStorage.setItem('apiData', JSON.stringify(JSON.parse(event.data).message.cryptoData.Data))
         localStorage.setItem('othData', JSON.stringify(JSON.parse(event.data).message))
-        //       showData(JSON.parse(event.data))
+
     }
+
     wsconn.onerror = function (event) {
-        //       console.error('an error occurred', event.data);
-        console.log("ERRROR DE WSSSSSSS");
+
+        //console.log("ERRROR DE WSSSSSSS");
+
         dispatch({ type: WEBSOCKET_ERROR, payload: event.data })
     }
 
     wsconn.onclose = function (event) {
-        //     console.info('close', event);
-        //     wsconn.send(JSON.stringify({ method: "close" }));
-        console.log("DESCONECTADO WSSSSSSS");
+
+        //console.log("DESCONECTADO WSSSSSSS");
         dispatch({ type: WEBSOCKET_DISCONNECTED, payload: event.data })
     }
 }

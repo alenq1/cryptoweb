@@ -17,12 +17,17 @@ import {
 } from '../constants/action-types'
 import axios from 'axios'
 import adapter from 'axios/lib/adapters/http'
+import { UrlApiCoin, ApiNews, ApiWallets, ApiExplorer } from '../services/apisources'
+
 
 export const getApiData = () => dispatch => {
+
   if (localStorage.getItem('apiData') === null) {
+
     console.log(localStorage.getItem('apiData'))
+
     axios(
-      'https://min-api.cryptocompare.com/data/top/totalvolfull?limit=100&tsym=USD'
+      UrlApiCoin
     )
       .then(data => {
         dispatch({ type: GET_DATA, payload: data.data.Data })
@@ -44,7 +49,7 @@ export const getApiNews = () => dispatch => {
 
   dispatch({ type: LOADING_FETCH })
 
-  axios('api/news/')
+  axios(ApiNews)
     .then(data => {
       if (!data.data['error']) {
         dispatch({ type: GET_NEWS, payload: data.data })
@@ -58,13 +63,16 @@ export const getApiNews = () => dispatch => {
     })
 }
 
-export const getLatest = site => dispatch => {
-  //console.log(site, 'PETICON PARA BUSCAR')
+export const getLatest = (site, keyword) => dispatch => {
+  console.log(site, keyword, 'PETICON PARA BUSCAR')
 
   dispatch({ type: LOADING_FETCH })
   axios.post(
-    'api/news/',
-    { searchsite: site },
+    ApiNews,
+    {
+      searchsite: site,
+      keyword
+    },
     {
       headers: {
         'Content-Type': 'application/json'
@@ -84,17 +92,21 @@ export const getLatest = site => dispatch => {
 
 ///////////////////////
 export const getChartData = (topsymbol, limit, timechart) => dispatch => {
+
   const localChartData = JSON.parse(localStorage.getItem('chartdata'))
 
-  console.log(localChartData, 'valor de localstroare data')
-  console.log(timechart, "PARAEJECUTAR EB CONSUTA API CHART")
-  if (localChartData) {
-    console.log('ME JECUTO APIDATA')
+  //console.log(localChartData, 'valor de localstroare data')
+  //console.log(timechart, "PARAEJECUTAR EB CONSUTA API CHART")
+
+  if (!localChartData) {
+
+    //  console.log('ME JECUTO APIDATA')
+
     const promises = []
 
     console.log((topsymbol, limit), 'PETICON PARA CHART')
     dispatch({ type: LOADING_CHART })
-    //localStorage.setItem('chartdata', '')
+
 
     console.log(topsymbol, 'TOPSYMBOL LIST')
 
@@ -140,14 +152,16 @@ export const getChartData = (topsymbol, limit, timechart) => dispatch => {
     console.log('me ejecuto YO ALFINAL  de APIDATa')
     dispatch({
       type: CHART_READY,
-      payload: JSON.parse([localStorage.getItem('chartdata')])
+      payload: JSON.parse(localStorage.getItem('chartdata'))
     })
   }
 }
 
 export const getWallets = () => dispatch => {
+
   dispatch({ type: LOADING_WALLETS })
-  axios('api/wallets/')
+
+  axios(ApiWallets)
     .then(data => {
       if (!data.data['error']) {
         dispatch({ type: GET_WALLETS, payload: data.data })
@@ -162,11 +176,14 @@ export const getWallets = () => dispatch => {
 }
 
 export const getExplorers = () => dispatch => {
+
   dispatch({ type: LOADING_EXPLORER })
-  axios('http://chainz.cryptoid.info/explorer/api.dws?q=summary/')
+
+  axios(ApiExplorer)
     .then(data => {
 
       dispatch({ type: GET_EXPLORER, payload: data.data })
+
       localStorage.setItem('explorerData', JSON.stringify(data.data))
 
     })
@@ -176,4 +193,3 @@ export const getExplorers = () => dispatch => {
       dispatch({ type: ERROR_GET_EXPLORER, payload: error })
     })
 }
-

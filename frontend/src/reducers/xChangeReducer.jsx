@@ -13,7 +13,7 @@ const initialState = {
     loadingch: false
 };
 
-const coinChangeReducer = (state = initialState, action) => {
+const xChangeReducer = (state = initialState, action) => {
     //console.log(action.payload, "PAYLOAD PARA CAMBIAR")
     switch (action.type) {
         case LOADING_COINCHANGE:
@@ -39,4 +39,4 @@ const coinChangeReducer = (state = initialState, action) => {
             return state;
     }
 };
-export default coinChangeReducer;
+export default xChangeReducer;

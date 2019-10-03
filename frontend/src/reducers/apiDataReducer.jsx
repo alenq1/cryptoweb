@@ -1,5 +1,6 @@
 import { GET_DATA, ERROR_GET, SORTED } from '../constants/action-types';
 
+
 const initialState = {
   //
   apiData: localStorage.getItem('apiData')
@@ -13,6 +14,7 @@ const initialState = {
 
 const apiDataReducer = (state = initialState, action) => {
   //console.log(action.payload, "PAYLOAD PARA CAMBIAR")
+
   switch (action.type) {
     case GET_DATA:
       return {
