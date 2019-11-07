@@ -1,6 +1,6 @@
 
 
-export const WServer = 'ws://192.168.1.6/ws/test'
+export const WServer = 'ws://localhost/ws/test'
 export const UrlApiImage = 'https://www.cryptocompare.com/'
 export const UrlApiCoin = 'https://min-api.cryptocompare.com/data/top/totalvolfull?limit=100&tsym=USD'
 export const ApiNews = 'api/news/'
