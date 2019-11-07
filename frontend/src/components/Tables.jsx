@@ -6,13 +6,16 @@ import { getApiData, getChartData } from '../actions/apiData';
 import { setSort } from '../actions/sort';
 import { sortData } from '../selectors/sortData';
 import { Table } from 'react-bootstrap'
+import Fade from 'react-reveal/Fade'
+import Slide from 'react-reveal/Slide'
+import {FaSortAmountDown, FaSortAmountUp} from 'react-icons/fa'
 
 const stythtd = {
   padding: '20px',
   borderColor: 'black'
 };
 
-const Tables = (props, { color, textColor, apiDatas, apiData }) => {
+const Tables = (props, { color, textColor, apiDatas, apiData, sorted }) => {
 
   //console.log(props.apiDatas, "APIDATAA DE SELECTORRRRRRRRRRRR")
 
@@ -40,13 +43,13 @@ const Tables = (props, { color, textColor, apiDatas, apiData }) => {
               <th style={{ ...stythtd }}>Rank</th>
               <th style={{ ...stythtd, textAlign: 'left' }}>Name</th>
               <th style={stythtd} onClick={() => props.setSort('price')}>
-                Last Price
+                Last Price {props.sortKey === 'price' && props.sortDirection === 'asc' ? <FaSortAmountUp/> : <FaSortAmountDown/>}
             </th>
               <th style={stythtd} onClick={() => props.setSort('pctChange')}>
-                % Change
+  % Change { props.sortKey === 'pctChange' && props.sortDirection === 'asc' ? <FaSortAmountUp/> : <FaSortAmountDown/> }  
             </th>
               <th style={stythtd} onClick={() => props.setSort('marketCap')}>
-                Market Cap
+                Market Cap {props.sortKey === 'marketCap' && props.sortDirection === 'asc' ? <FaSortAmountUp/> : <FaSortAmountDown/> }
             </th>
               <th style={stythtd}>Circulating Supply</th>
               <th style={stythtd}>24h Volume</th>
@@ -61,6 +64,7 @@ const Tables = (props, { color, textColor, apiDatas, apiData }) => {
             {!props.apiDatas[0].CoinInfo
               ? 0
               : props.apiDatas.map((coin, index) => (
+                <Slide bottom spy={coin.CoinInfo.Name}>
                 <tr
                   style={{ padding: '2em' }}
                   key={index}
@@ -75,12 +79,17 @@ const Tables = (props, { color, textColor, apiDatas, apiData }) => {
                     />
                     {coin.CoinInfo.FullName} {coin.CoinInfo.Name}
                   </td>
+                  <Fade bottom duration={250} spy={coin.DISPLAY.USD.PRICE}>
                   <td style={stythtd}>{coin.DISPLAY.USD.PRICE}</td>
+                  </Fade>
+                  <Fade bottom duration={250} spy={coin.RAW.USD.CHANGEPCT24HOUR}>
                   <td
                     style={coin.RAW.USD.CHANGEPCT24HOUR > 0 ? { color: "#1DAC22" } : { color: "red" }}
                   >
+                    
                     {coin.DISPLAY.USD.CHANGEPCT24HOUR} %
                   </td>
+                  </Fade>
                   <td style={{ ...stythtd, textAlign: 'left' }}>
                     {coin.DISPLAY.USD.MKTCAP}{' '}
                   </td>
@@ -91,6 +100,7 @@ const Tables = (props, { color, textColor, apiDatas, apiData }) => {
                     {coin.DISPLAY.USD.VOLUME24HOUR}
                   </td>
                 </tr>
+                </Slide>
               ))}
           </tbody>
         </Table>
@@ -103,7 +113,9 @@ const mapStateToProps = state => {
   return {
     apiDatas: sortData(state),
     color: state.theme.theme.color,
-    textColor: state.theme.theme.textColor
+    textColor: state.theme.theme.textColor,
+    sortDirection: state.apiData.sortDirection,
+    sortKey: state.apiData.sortKey
   }
 }
 

@@ -152,7 +152,7 @@ const RawLine2 = props => {
       type: 'value',
       splitLine: { show: false },
       // FOR BETTER VISUALIZATION IN START AXIS VALUE
-      min: chartData[0] / 1.5
+      min: chartData[0] / 1.15
     },
     series: [
       {

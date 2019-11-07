@@ -74,8 +74,9 @@ const Header = props => {
           <IoIosCube size='1.5em' color={props.textColor} />
         </IconButton>
         <ThemeButton onClick={() => props.history.push('/')}>CryptoCenter</ThemeButton>
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" as={Switch} />
         <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className='m-lg-auto' style={navstyle}>
+          <Nav className='m-lg-auto ml-sm-1' style={navstyle}>
             <ThemeButton
 
               onClick={() => props.history.push('/news')}>
@@ -92,7 +93,7 @@ const Header = props => {
               href=''
 
               onClick={() => props.history.push('/wallets')}>
-              Wallet
+              Wallets
             </ThemeButton>
             <ThemeButton
               href=''
@@ -104,7 +105,7 @@ const Header = props => {
               href=''
 
               onClick={() => props.history.push('/xchange')}>
-              CoinChange
+              Exchanges
             </ThemeButton>
           </Nav>
           <Form inline>
@@ -125,7 +126,7 @@ const Header = props => {
           />
           <IoIosMoon size='1.5em' style={{ color: props.textColor }} />
         </Navbar.Collapse>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        
       </Navbar>
     </>
   )

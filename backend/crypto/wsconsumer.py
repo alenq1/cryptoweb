@@ -25,7 +25,7 @@ class TestConsumer(AsyncJsonWebsocketConsumer):
         # while self.channel_layer:
             
         #     taskk_result = get_api_data.delay()
-        #     print(taskk_result, "DETALLLESSSSSSS TARE PROGRAMADA")
+        #     print(taskk_result, "DETALLES TARE PROGRAMADA")
         #     #page = get_page('https://blog.feedspot.com/cryptocurrency_blogs/')
         #     #response = scrap_news_sites(page)
 

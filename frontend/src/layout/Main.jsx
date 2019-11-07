@@ -21,17 +21,23 @@ const Main = ({ color, textColor, ConnectWS, image }) => {
   //console.log(image, "DESDEREDUX")
 
   const style = {
-    // background: `linear-gradient(61deg, #000000 0%, rgba(0, 0, 
-    //   0, .6) 70%),url(${imagecode1})`,
-    backgroundImage: `url(${image})`,
+    // background: `linear-gradient(61deg, #ffffff 20%, rgba(255, 220, 
+    //   220, .1) 70%),url(${image})`,
+
+    //backgroundColor: 'gray',
+    backgroundImage: `url(${image})`, 
     textShadow: `${color === 'whitesmoke' ? '' : '5px 5px #000000'} `,
     textOutline: color,
     textDecoration: 'blink',
     backgroundColor: color,
     color: textColor,
     textAlign: 'center',
-    height: '100%'
+    height: '100%',
+    transition: 'all 0.5s',
+    //fontFamily: 'Open Sans Condensed sans-serif'
   }
+
+
 
   useEffect(() => {
 

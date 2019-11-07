@@ -47,7 +47,7 @@ def get_page(url, scrap=True):
         soup.prettify()
         return soup
     else:
-        print("SOOOOOLLLLLOOO REQQQQUESST")
+        print("SOLO REQUEST")
         return page.json()
     
 
@@ -96,9 +96,10 @@ def get_site_content(to_scrap, keyword):
         return [{'error': str(ex)}]
 
 
+##TEST TASK
 @shared_task
 def add(a, b):
-    print('EJEVUTADA TASKKK')
+    #print('EJECUTADA TASK')
     time.sleep(5)
     return a + b
 
@@ -142,7 +143,6 @@ def get_api_data():
 
 def get_google_search(to_scrap):
     
-    #print('ME LLAMARON', to_scrap)
     
     response1 = []
     try:

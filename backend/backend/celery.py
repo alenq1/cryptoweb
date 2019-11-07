@@ -18,7 +18,7 @@ def debug_task(self):
 
 celery_app.conf.beat_schedule = {
      # Executes every 5 seconds to requests apis
-     'SCARP_API_DATA': {
+     'SCRAP_API_DATA': {
          'task': 'crypto.scraper.get_api_data',
          'schedule': 5,
          'args': (),

@@ -6,7 +6,10 @@ import { ConnectWS } from '../actions/websocket'
 import Tables from '../components/Tables'
 import Minichart from '../components/Minichart'
 import ModalCrypto from '../components/ModalCrypto';
-import { WhisperSpinner } from "react-spinners-kit";
+import Loader from '../components/Loader'
+import {FaAngleDoubleDown} from 'react-icons/fa'
+import Jump from 'react-reveal/Jump'
+
 
 
 const Home = (props) => {
@@ -29,22 +32,33 @@ const Home = (props) => {
 
     <div>
       {props.status === 'connecting' || props.status === 'connected' ?
-        <center>
-          <h1 className='mt-5 p-5'>Loading...</h1>
-          <WhisperSpinner
-            size='500'
-            color="#686769"
-            loading='true'
-            frontColor="#386769"
-            backColor="#646459"
-            className="mt-5"
-          />
-        </center>
+        <Loader/>
         :
         <center>
           <Minichart />
 
-          <h2 className="m-5">Top 100 Crypto</h2>
+          <div className="m-5" 
+          style={{
+            background: props.theme.color === 'white' &&
+              'linear-gradient(to bottom, #ada996, #f2f2f2, #dbdbdb, #eaeaea)',
+            color: props.theme.textColor, 
+            borderColor: '#000000',
+            borderBlockColor: '#000000',
+            width: '20%',
+            
+            
+          }}
+          >
+           
+          
+          <h4>Top 100 Crypto</h4>
+          <div className='mt-4'>
+          <Jump top forever={true} duration={4000}>
+          <FaAngleDoubleDown size='2em'/>
+          
+          </Jump>
+          </div>
+          </div>
           <Tables
             detailCrypto={detailCrypto}
           />
@@ -63,7 +77,7 @@ const Home = (props) => {
 const mapStateToProps = state => {
   return {
     status: state.WSocket.status,
-    //txtColor: state.theme.theme.textColor
+    theme: state.theme.theme
   }
 }
 

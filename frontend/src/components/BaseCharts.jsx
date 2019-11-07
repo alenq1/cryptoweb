@@ -48,7 +48,9 @@ const BaseCharts = ({
   return (
 
     <>
-      <h1 className='m-5 shadow-lg w-25 center-block' style={{ background: theme.color }}>Top Crtpto Charts</h1>
+      <h1 className='m-5  w-25 center-block' style={{ 
+          color: theme.textColor }}>
+        Top Crypto Charts</h1>
       <AppBar position="static"
         style={{
           background: theme.color === 'black' ? 'linear-gradient(to bottom, #232526, #414345)'
@@ -59,8 +61,8 @@ const BaseCharts = ({
           onChange={handleChange}
           variant='standard'
           centered='true'>
-          <Tab label="Day" value='day' style={{ color: theme.textColor }} />
-          <Tab label="Hour" value='hour' style={{ color: theme.textColor }} />
+          <Tab label="Daily" value='day' style={{ color: theme.textColor }} />
+          <Tab label="Hourly" value='hour' style={{ color: theme.textColor }} />
           <Tab label="Minute" value='minute' style={{ color: theme.textColor }} />
         </Tabs>
       </AppBar>

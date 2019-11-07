@@ -48,19 +48,19 @@ class WalletsApi(APIView):
 
     def get(self, request, *args, **kwargs):
 
-        print(request, "REQUEST DESDE EL BROWSER")
+        #print(request, "REQUEST DESDE EL BROWSER")
         page = get_page(urls[0], False)
 
         return Response(page, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
-        #print(request.data['searchsite'], "DATA ENVIAD")
+        #print(request.data['searchsite'], "DATA ENVIADA")
         page_to_scrap = get_page(request.data['searchsite'])
 
         # return Response({"Active": "OK"}, status=status.HTTP_200_OK)
         resp = get_site_content(page_to_scrap, keyword='news')
 
         to_send = {'mainsite': request.data['searchsite'], 'maindata': resp}
-        #print(to_send, "ANTES DE MANDAR A PINTAR")
+        #print(to_send, "ANTES DE MANDAR A FRONT")
         return Response(to_send, status=status.HTTP_200_OK)
 

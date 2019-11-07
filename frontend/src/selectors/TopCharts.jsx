@@ -15,7 +15,7 @@ export const TopCharts = createSelector(
 
     (data) => {
 
-        console.log(data, "RAWDATA PARA CHARTTTTTTT")
+        //console.log(data, "RAWDATA PARA CHART")
 
 
         const numberTop = (numTop) => {
@@ -23,7 +23,7 @@ export const TopCharts = createSelector(
             if (data[0].cryptoData.length > 1) {
                 let Coinlist = []
                 for (let topCrypto = 0; topCrypto <= numTop; topCrypto++) {
-                    console.log(data[0].cryptoData[topCrypto].CoinInfo.Name, "SYMBOLO PARA BUSCAR DATA")
+                    //console.log(data[0].cryptoData[topCrypto].CoinInfo.Name, "SYMBOLO PARA BUSCAR DATA")
                     Coinlist.push(data[0].cryptoData[topCrypto].CoinInfo.Name)
 
                 }

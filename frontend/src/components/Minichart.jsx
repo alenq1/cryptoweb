@@ -6,6 +6,7 @@ import { sortData } from '../selectors/sortData'
 import { makeStyles } from '@material-ui/core/styles';
 import { useSpring, animated, interpolate, } from 'react-spring';
 import { Spring, Transition } from 'react-spring/renderprops'
+import Fade from 'react-reveal/Fade'
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import FilledInput from '@material-ui/core/FilledInput';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -54,11 +55,13 @@ const Minichart = (props) => {
 
   return (
     <div>
-      <h2 className="m-5 shadow-lg w-25 rounded-top"
+      <Card.Header className=" rounded-top"
         style={{
-          background: props.theme.color === 'black' ? 'linear-gradient(to bottom, #232526, #414345)'
-            : 'linear-gradient(to bottom, #ada996, #f2f2f2, #dbdbdb, #eaeaea)',
-          color: props.theme.textColor
+          background: props.theme.color === 'white' && 
+             'linear-gradient(to bottom, #ada996, #f2f2f2, #dbdbdb, #eaeaea)',
+          color: props.theme.textColor,
+          width: '30%',
+          marginTop: '5%'
         }}
       >Top 5 Crypto
       <FormControl >
@@ -77,18 +80,20 @@ const Minichart = (props) => {
             <MenuItem value={'marketCap'}>Market Cap</MenuItem>
           </Select>
         </FormControl> {props.sortDirection === "desc" ? " Winners" : " Losers"}
-      </h2>
+      </Card.Header>
       <div className="row align-content-center col-lg-11 col-sm-11" style={style}>
         {par1 === null
           ? 0
           :
           par1.map((ticker, index) =>
-            <Card className='m-5 m-sm-3 col-lg-2 col-sm-8'
+            <div className='m-5 m-sm-3 col-lg-2 col-sm-8' key={index}>
+            <Card 
               style=
               {{
                 background: props.theme.color === 'black' ? 'linear-gradient(to bottom, #232526, #414345)'
                   : 'linear-gradient(to bottom, #ada996, #f2f2f2, #dbdbdb, #eaeaea)',
-                color: props.theme.textColor
+                color: props.theme.textColor,
+                marginTop: '40%'
               }}
               key={index}>
               <Card.Header>
@@ -103,14 +108,10 @@ const Minichart = (props) => {
                   <>
 
                     <h4>
-                      <Transition
-                        items={ticker.DISPLAY.USD.PRICE}
-                        from={{ opacity: 0 }}
-                        enter={{ opacity: 1 }}
-                        leave={{ opacity: 0 }}>
-
-                        {item => props => <div style={props}>{ticker.DISPLAY.USD.PRICE}</div>}
-                      </Transition>
+                      <Fade bottom spy={ticker.DISPLAY.USD.PRICE}>
+                        
+                        <div >{ticker.DISPLAY.USD.PRICE}</div>
+                        </Fade>
                     </h4>
                     <h5 style={ticker.RAW.USD.CHANGEPCT24HOUR > 0 ? { color: "#1DAC22" } : { color: "red" }}
                     >
@@ -119,6 +120,7 @@ const Minichart = (props) => {
                 }
               </Card.Body>
             </Card>
+            </div>
           )}
 
       </div>
